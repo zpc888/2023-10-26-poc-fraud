@@ -1,4 +1,4 @@
-package com.prot.poc.fraud.service;
+package com.prot.poc.fraud.pdfgen;
 
 /**
  * @Author: <a href="mailto: pengcheng.zhou@gmail.com">PengCheng Zhou</a>

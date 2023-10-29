@@ -1,6 +1,6 @@
 package com.prot.poc.fraud.util;
 
-import com.prot.poc.fraud.service.PDFGenUtils;
+import com.prot.poc.fraud.pdfgen.PDFGenUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;

@@ -1,4 +1,4 @@
-package com.prot.poc.fraud.service;
+package com.prot.poc.fraud.pdfgen;
 
 import com.prot.poc.fraud.model.Fraud;
 import com.prot.poc.fraud.model.FraudAttestation;

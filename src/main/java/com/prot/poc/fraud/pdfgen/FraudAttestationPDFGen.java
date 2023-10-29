@@ -1,4 +1,4 @@
-package com.prot.poc.fraud.service;
+package com.prot.poc.fraud.pdfgen;
 
 import com.prot.poc.fraud.model.FraudAttestation;
 import com.prot.poc.fraud.model.FraudItem;
@@ -6,7 +6,6 @@ import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;

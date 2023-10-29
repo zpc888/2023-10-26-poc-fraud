@@ -1,4 +1,4 @@
-package com.prot.poc.fraud.service;
+package com.prot.poc.fraud.pdfgen;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;

@@ -1,0 +1,7 @@
+-- create table USERS (
+--     ID int not null AUTO_INCREMENT,
+--     NAME varchar(100)  not null,
+--     STATUS int,
+--     PROFILE_PIC blob,
+--     PRIMARY KEY (ID)
+-- );

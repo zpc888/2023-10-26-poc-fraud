@@ -2,9 +2,11 @@ package com.prot.poc.fraud.control;
 
 import com.prot.poc.fraud.model.Client;
 import com.prot.poc.fraud.model.CreditBureauReport;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import com.prot.poc.fraud.pdfgen.CreditReportPDFGen;
+import com.prot.poc.fraud.service.CreditBureauService;
+import io.swagger.v3.oas.annotations.headers.Header;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 /**
@@ -12,9 +14,20 @@ import reactor.core.publisher.Mono;
  * @Created: 2023-10-26T15:24 Thursday
  */
 @RestController
+@RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class CreditBureauController {
-    @PostMapping("/api/v1/credit-report")
-    public Mono<CreditBureauReport> retrieveCreditReport(@RequestBody Client client) {
-        return null;
+    private final CreditBureauService service;
+
+    @PostMapping("/credit-report")
+    public Mono<CreditBureauReport> retrieveCreditReport(
+            @RequestHeader(value = "x-vendor-client-id", required = false) String vendorClientId,
+            @RequestBody Client client) {
+        try {
+            CreditBureauReport report = service.getCreditReport(vendorClientId, client);
+            return Mono.just(report);
+        } catch (Exception ex) {
+            throw new RuntimeException("Fail to get CBR report for client: " + client.fullName(), ex);
+        }
     }
 }

@@ -4,11 +4,12 @@ import com.prot.poc.fraud.entity.DocStore;
 import com.prot.poc.fraud.model.DocumentResult;
 import com.prot.poc.fraud.repository.DocStoreRepository;
 import com.prot.poc.fraud.service.FraudService;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,7 @@ public class DocumentController {
     private final DocStoreRepository docStoreRepository;
 
     @GetMapping("/documents/{docId}")
-    public Mono<DocumentResult> getDocumentContentAndStatus(@PathVariable String docId, ServerHttpResponse response) {
+    public Mono<DocumentResult> getDocumentContentAndStatus(@PathVariable String docId, @Parameter(hidden = true) ServerHttpResponse response) {
         return getDocumentById(docId, response, true);
     }
 
@@ -49,7 +50,7 @@ public class DocumentController {
     }
 
     @GetMapping("/document-statuses/{docId}")
-    public Mono<DocumentResult> getDocumentStatusOnly(@PathVariable String docId, ServerHttpResponse response) {
+    public Mono<DocumentResult> getDocumentStatusOnly(@PathVariable String docId, @Parameter(hidden = true) ServerHttpResponse response) {
         return getDocumentById(docId, response, false);
     }
 
@@ -59,7 +60,7 @@ public class DocumentController {
     }
 
     @GetMapping("/document-signs/{docId}")
-    public Mono<DocumentResult> mimicSigned(@PathVariable String docId, ServerHttpResponse response) {
+    public Mono<DocumentResult> mimicSigned(@PathVariable String docId, @Parameter(hidden = true) ServerHttpResponse response) {
         try {
             Mono<DocumentResult> result = fraudGenAndSign.mimicSign(docId);
             return result.switchIfEmpty(httpError(response, HttpStatus.NOT_FOUND));

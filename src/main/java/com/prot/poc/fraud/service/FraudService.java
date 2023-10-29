@@ -52,14 +52,13 @@ public class FraudService {
                 docStore.getStatus().toString(), encoded);
     }
 
-    public Mono<DocumentResult> mimicSign(String docId) throws Exception {
+    public Mono<DocumentResult> mimicSign(Long docId) throws Exception {
 //        final String callbackOauthUrl = "https://ability-business-3077-dev-ed.scratch.my.salesforce.com/services/oauth2/token";
 //        final String clientId = "3MVG99nUjAVk2edwYTM8ZHhUfVBKY.in7kFNX7ortXNlaHZ2LFiqiOASh8znJ7WtA7ftBnOGogyVcS26.MKIa";
 //        final String clientSecret = "ECAB64013CEC0A2DB944975E3E87228ACEDFDEBDC3382DC2B6723F7D07724950";
 //        final String grantType = "client_credentials";
 //        final String callbackUrl = "https://ability-business-3077-dev-ed.scratch.my.salesforce.com/services/apexrest/fraud/v1/esign/status/callback/after-esigned";
-        long id = Long.parseLong(docId);
-        Optional<DocStore> byId = docStoreRepository.findById(id);
+        Optional<DocStore> byId = docStoreRepository.findById(docId);
         if (!byId.isPresent()) {
             log.error("cannot find document id: {}", docId);
             return Mono.empty();
@@ -84,7 +83,7 @@ public class FraudService {
         CallbackInfo cbi = JSONUtils.fromJSONString(doc.getCallbackInfo(), CallbackInfo.class);
         Mono<String> accessToken = getAccessToken(cbi.oauthUrl(), cbi.grantType(), cbi.clientId(), cbi.clientSecret());
         final String callbackUrl = cbi.callbackUrl();
-        Mono<Map<String, Object>> result = doCallback(accessToken, callbackUrl, docId, signedDocId);
+        Mono<Map<String, Object>> result = doCallback(accessToken, callbackUrl, docId.toString(), signedDocId);
         return result.map(m -> {
             log.debug("callback {} response is: {}", callbackUrl, m);
             String base64PDF = Base64.getEncoder().encodeToString(signedPDF);

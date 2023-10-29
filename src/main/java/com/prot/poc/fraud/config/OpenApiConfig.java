@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class OpenApiConfig {
+    private static String notToAddHeadersForOperation = "viewDocument";
 
     @Bean
     public OpenAPI pocFraudOpenAPI(@Autowired VendorsConfig vendorsConfig) {
@@ -36,7 +37,9 @@ public class OpenApiConfig {
 
     @Bean
     public OpenApiCustomizer addGloablVendorAuthHeaders(@Autowired VendorsConfig vendorsConfig) {
-        return api -> api.getPaths().values().stream().flatMap(pathItem -> pathItem.readOperations().stream())
+        return api -> api.getPaths().values().stream()
+                .flatMap(pathItem -> pathItem.readOperations().stream())
+                .filter(operation -> !notToAddHeadersForOperation.equals(operation.getOperationId()))
                 .forEach(operation -> {
                     // remove first if global headers are referred by operations already
                     operation.getParameters().removeIf(param -> {

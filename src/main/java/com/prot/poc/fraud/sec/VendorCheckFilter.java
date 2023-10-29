@@ -18,6 +18,7 @@ import reactor.core.publisher.Mono;
 @Component
 public class VendorCheckFilter implements WebFilter {
     private String apiPathPrefix = "/api";
+    private String excludedPath = "/document-views/";
 
     private final VendorsConfig vendorsConfig;
     private final String httpHeaderNameForVendorClientId;
@@ -34,7 +35,7 @@ public class VendorCheckFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
-        if (path.startsWith(apiPathPrefix)) {
+        if (path.startsWith(apiPathPrefix) && !path.contains(excludedPath)) {
             HttpHeaders headers = exchange.getRequest().getHeaders();
             String clientId = headers.getFirst(httpHeaderNameForVendorClientId);
             String clientSecret = headers.getFirst(httpHeaderNameForVendorClientSecret);

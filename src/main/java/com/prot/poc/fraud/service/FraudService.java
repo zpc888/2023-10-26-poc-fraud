@@ -80,13 +80,13 @@ public class FraudService {
         String signedDocId = signedDoc.getId().toString();
         log.debug("Saved the signed doc with new doc-id = {}", signedDocId);
 
+        String base64PDF = Base64.getEncoder().encodeToString(signedPDF);
         CallbackInfo cbi = JSONUtils.fromJSONString(doc.getCallbackInfo(), CallbackInfo.class);
         Mono<String> accessToken = getAccessToken(cbi.oauthUrl(), cbi.grantType(), cbi.clientId(), cbi.clientSecret());
         final String callbackUrl = cbi.callbackUrl();
-        Mono<Map<String, Object>> result = doCallback(accessToken, callbackUrl, docId.toString(), signedDocId);
+        Mono<Map<String, Object>> result = doCallback(accessToken, callbackUrl, docId.toString(), signedDocId, base64PDF);
         return result.map(m -> {
             log.debug("callback {} response is: {}", callbackUrl, m);
-            String base64PDF = Base64.getEncoder().encodeToString(signedPDF);
             DocumentResult finalResult = new DocumentResult(signedDocId, "Completed", base64PDF);
             return finalResult;
         });
@@ -111,11 +111,13 @@ public class FraudService {
         return accessToken;
     }
 
-    private Mono<Map<String, Object>> doCallback(Mono<String> accessToken, String callbackUrl, String docId, String signedDocId) {
+    private Mono<Map<String, Object>> doCallback(Mono<String> accessToken, String callbackUrl,
+                                                 String docId, String signedDocId, String base64PDF) {
         WebClient client = WebClient.create(callbackUrl);
         Map<String, Object> reqBody = new LinkedHashMap<>();
         reqBody.put("documentId", docId);
         reqBody.put("signedDocumentId", signedDocId);
+        reqBody.put("signedBase64Content", base64PDF);
         Mono<Map<String, Object>> ret = accessToken.flatMap(token -> {
             return client.post()
                     .headers(h -> h.set("Content-Type", "application/json"))

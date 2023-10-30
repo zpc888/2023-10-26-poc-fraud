@@ -1,7 +1,6 @@
 package com.prot.poc.fraud.pdfgen;
 
 import com.prot.poc.fraud.model.Client;
-import com.prot.poc.fraud.model.CreditBureauReport;
 import com.prot.poc.fraud.model.CreditData;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -79,7 +78,7 @@ public class CreditReportPDFGen {
         stream.showText(": " + report.creditScore());
 
         // --- Credit date
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String creditDate = report.creditDate().toInstant().atZone(ZoneId.systemDefault())
                 .toLocalDateTime().format(formatter);
 
@@ -114,7 +113,7 @@ public class CreditReportPDFGen {
         // footer date
         PDFont footerFont = new PDType1Font(Standard14Fonts.FontName.COURIER);
         int footerFontSize = 8;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String footer = LocalDateTime.now().format(formatter);
         float x = pageWidth - PDFGenUtils.getTextFontWidth(footer, footerFont, footerFontSize) - leading;
         PDFGenUtils.showSingleLine(stream, footer, x, 20, footerFont, footerFontSize, Color.BLACK);

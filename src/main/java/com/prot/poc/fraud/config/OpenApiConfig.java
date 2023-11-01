@@ -3,8 +3,8 @@ package com.prot.poc.fraud.config;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.HeaderParameter;
-import io.swagger.v3.oas.models.parameters.Parameter;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,11 +26,14 @@ public class OpenApiConfig {
                         .description("Gen PDF, retrive PDF and mimic PDF sign")
                         .version("1.0")
                 );
+        Schema stringType = new Schema().type("string");
         ret.components(new Components()
                 .addParameters("vendor-client-id", new HeaderParameter().required(true)
-                        .name(vendorsConfig.getAuth().getClientIdHeaderName()).description("Vendor Client Id"))
+                        .name(vendorsConfig.getAuth().getClientIdHeaderName())
+                        .description("Vendor Client Id").schema(stringType))
                 .addParameters("vendor-client-secret", new HeaderParameter().required(true)
-                        .name(vendorsConfig.getAuth().getClientSecretHeaderName()).description("Vendor Client Secret"))
+                        .name(vendorsConfig.getAuth().getClientSecretHeaderName())
+                        .description("Vendor Client Secret").schema(stringType))
         );
         return ret;
     }

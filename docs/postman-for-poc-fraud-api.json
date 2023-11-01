@@ -1,0 +1,339 @@
+{
+  "collection": {
+    "info": {
+      "_postman_id": "c191412e-70b6-41ca-a963-c47548faec0f",
+      "name": "2023-11-01 POC Fraud",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      "updatedAt": "2023-11-01T22:12:17.000Z",
+      "uid": "1797497-c191412e-70b6-41ca-a963-c47548faec0f"
+    },
+    "item": [
+      {
+        "name": "gen fraud attestation",
+        "id": "87f602f3-8d19-4b5e-bcef-f6557ba851ee",
+        "protocolProfileBehavior": {
+          "disableBodyPruning": true
+        },
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "x-vendor-client-id",
+              "value": "{{vender_client_id}}",
+              "type": "text"
+            },
+            {
+              "key": "x-vendor-client-secret",
+              "value": "{{vender_client_secret}}",
+              "type": "text"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"signer\": {\n    \"id\": \"78478487\",\n    \"fullName\": \"David Smith\",\n    \"email\": \"David.Smith@poc.fraud.com\",\n    \"phone\": \"416-987-8787\"\n  },\n  \"fraud\": {\n    \"fraudNumber\": \"FA-0010\",\n    \"clientName\": \"David Smith\",\n    \"fraudReason\": \"Other\",\n    \"otherReasonDetail\": \"Test Other Reason Detail\",\n    \"items\": [\n      {\n        \"txDate\": \"2023-11-01T20:29:24.885Z\",\n        \"merchant\": \"Walmart Scarborough Superstore\",\n        \"cardNumber\": \"78376363\",\n        \"amount\": 28.86\n      },\n      {\n        \"txDate\": \"2023-10-20T09:29:24.885Z\",\n        \"merchant\": \"Indigo book store\",\n        \"cardNumber\": \"78376363\",\n        \"amount\": 186.23\n      }      \n    ]\n  },\n  \"callback\": {\n    \"callbackUrl\": \"https://ability-business-3077-dev-ed.scratch.my.salesforce.com/services/apexrest/fraud/v1/esign/status/callback/after-esigned\",\n    \"oauthUrl\": \"https://ability-business-3077-dev-ed.scratch.my.salesforce.com/services/oauth2/token\",\n    \"grantType\": \"client_credentials\",\n    \"clientId\": \"3MVG99nUjAVk2edwYTM8ZHhUfVBKY.in7kFNX7ortXNlaHZ2LFiqiOASh8znJ7WtA7ftBnOGogyVcS26.MKIa\",\n    \"clientSecret\": \"ECAB64013CEC0A2DB944975E3E87228ACEDFDEBDC3382DC2B6723F7D07724950\"\n  }\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          },
+          "url": {
+            "raw": "{{base_url}}/fraud-attestations",
+            "host": [
+              "{{base_url}}"
+            ],
+            "path": [
+              "fraud-attestations"
+            ]
+          }
+        },
+        "response": [],
+        "uid": "1797497-87f602f3-8d19-4b5e-bcef-f6557ba851ee"
+      },
+      {
+        "name": "gen credit report",
+        "id": "81fa3eed-5f06-4ef7-8b44-1354f2f8d09e",
+        "protocolProfileBehavior": {
+          "disableBodyPruning": true
+        },
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "x-vendor-client-id",
+              "value": "{{vender_client_id}}",
+              "type": "text"
+            },
+            {
+              "key": "x-vendor-client-secret",
+              "value": "{{vender_client_secret}}",
+              "type": "text"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"id\": \"78478487\",\n  \"fullName\": \"David Smith\"\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          },
+          "url": {
+            "raw": "{{base_url}}/credit-report",
+            "host": [
+              "{{base_url}}"
+            ],
+            "path": [
+              "credit-report"
+            ]
+          }
+        },
+        "response": [],
+        "uid": "1797497-81fa3eed-5f06-4ef7-8b44-1354f2f8d09e"
+      },
+      {
+        "name": "get doc info with base64 pdf",
+        "id": "3df1cc0a-7137-4f96-b853-afb32b87bf64",
+        "protocolProfileBehavior": {
+          "disableBodyPruning": true
+        },
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "x-vendor-client-id",
+              "value": "{{vender_client_id}}",
+              "type": "text"
+            },
+            {
+              "key": "x-vendor-client-secret",
+              "value": "{{vender_client_secret}}",
+              "type": "text"
+            }
+          ],
+          "url": {
+            "raw": "{{base_url}}/documents/5",
+            "host": [
+              "{{base_url}}"
+            ],
+            "path": [
+              "documents",
+              "5"
+            ]
+          }
+        },
+        "response": [],
+        "uid": "1797497-3df1cc0a-7137-4f96-b853-afb32b87bf64"
+      },
+      {
+        "name": "get doc status only without pdf",
+        "id": "b82cd603-d018-4942-bbd5-8ab8a725c106",
+        "protocolProfileBehavior": {
+          "disableBodyPruning": true
+        },
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "x-vendor-client-id",
+              "value": "{{vender_client_id}}",
+              "type": "text"
+            },
+            {
+              "key": "x-vendor-client-secret",
+              "value": "{{vender_client_secret}}",
+              "type": "text"
+            }
+          ],
+          "url": {
+            "raw": "{{base_url}}/document-statuses/5",
+            "host": [
+              "{{base_url}}"
+            ],
+            "path": [
+              "document-statuses",
+              "5"
+            ]
+          }
+        },
+        "response": [],
+        "uid": "1797497-b82cd603-d018-4942-bbd5-8ab8a725c106"
+      },
+      {
+        "name": "mimic document sign",
+        "id": "3a372209-d89f-4c38-9d58-61af3c096e8a",
+        "protocolProfileBehavior": {
+          "disableBodyPruning": true
+        },
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "x-vendor-client-id",
+              "value": "{{vender_client_id}}",
+              "type": "text"
+            },
+            {
+              "key": "x-vendor-client-secret",
+              "value": "{{vender_client_secret}}",
+              "type": "text"
+            }
+          ],
+          "url": {
+            "raw": "{{base_url}}/document-signs/5",
+            "host": [
+              "{{base_url}}"
+            ],
+            "path": [
+              "document-signs",
+              "5"
+            ]
+          }
+        },
+        "response": [],
+        "uid": "1797497-3a372209-d89f-4c38-9d58-61af3c096e8a"
+      },
+      {
+        "name": "view document PDF directly",
+        "id": "faedde40-1b0b-4ce6-b849-f0edff311e44",
+        "protocolProfileBehavior": {
+          "disableBodyPruning": true
+        },
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{base_url}}/document-views/15",
+            "host": [
+              "{{base_url}}"
+            ],
+            "path": [
+              "document-views",
+              "15"
+            ]
+          }
+        },
+        "response": [],
+        "uid": "1797497-faedde40-1b0b-4ce6-b849-f0edff311e44"
+      },
+      {
+        "name": "salesforce access token",
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "5a8ae663-a5dc-4db6-b953-21d36f693de6",
+              "exec": [
+                "const jsonData = JSON.parse(responseBody);",
+                "const jwtToken = jsonData.access_token;",
+                "console.log(\"access-token is\", jwtToken);",
+                "postman.setEnvironmentVariable(\"sf_access_token\", jwtToken);"
+              ],
+              "type": "text/javascript"
+            }
+          }
+        ],
+        "id": "7eecd0ed-2cd0-4f80-ad1f-9ed12f6fdeea",
+        "protocolProfileBehavior": {
+          "disableBodyPruning": true
+        },
+        "request": {
+          "method": "POST",
+          "header": [],
+          "url": {
+            "raw": "https://ability-business-3077-dev-ed.scratch.my.salesforce.com/services/oauth2/token?client_id=3MVG99nUjAVk2edwYTM8ZHhUfVBKY.in7kFNX7ortXNlaHZ2LFiqiOASh8znJ7WtA7ftBnOGogyVcS26.MKIa&client_secret=ECAB64013CEC0A2DB944975E3E87228ACEDFDEBDC3382DC2B6723F7D07724950&grant_type=client_credentials",
+            "protocol": "https",
+            "host": [
+              "ability-business-3077-dev-ed",
+              "scratch",
+              "my",
+              "salesforce",
+              "com"
+            ],
+            "path": [
+              "services",
+              "oauth2",
+              "token"
+            ],
+            "query": [
+              {
+                "key": "client_id",
+                "value": "3MVG99nUjAVk2edwYTM8ZHhUfVBKY.in7kFNX7ortXNlaHZ2LFiqiOASh8znJ7WtA7ftBnOGogyVcS26.MKIa"
+              },
+              {
+                "key": "client_secret",
+                "value": "ECAB64013CEC0A2DB944975E3E87228ACEDFDEBDC3382DC2B6723F7D07724950"
+              },
+              {
+                "key": "grant_type",
+                "value": "client_credentials"
+              }
+            ]
+          }
+        },
+        "response": [],
+        "uid": "1797497-7eecd0ed-2cd0-4f80-ad1f-9ed12f6fdeea"
+      },
+      {
+        "name": "salesforce callback after e-signed",
+        "id": "5e0cccbe-cfd7-49b2-9b0d-deb36ee81f6a",
+        "protocolProfileBehavior": {
+          "disableBodyPruning": true
+        },
+        "request": {
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "key": "token",
+                "value": "{{sf_access_token}}",
+                "type": "string"
+              }
+            ]
+          },
+          "method": "POST",
+          "header": [],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n    \"documentId\": \"5\",\n    \"signedDocumentId\": \"10\",\n    \"signedBase64Content\": \"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\"\n  }",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          },
+          "url": {
+            "raw": "https://ability-business-3077-dev-ed.scratch.my.salesforce.com/services/apexrest/fraud/v1/esign/status/callback/after-esigned",
+            "protocol": "https",
+            "host": [
+              "ability-business-3077-dev-ed",
+              "scratch",
+              "my",
+              "salesforce",
+              "com"
+            ],
+            "path": [
+              "services",
+              "apexrest",
+              "fraud",
+              "v1",
+              "esign",
+              "status",
+              "callback",
+              "after-esigned"
+            ]
+          }
+        },
+        "response": [],
+        "uid": "1797497-5e0cccbe-cfd7-49b2-9b0d-deb36ee81f6a"
+      }
+    ],
+    "variable": [
+      {
+        "key": "sf_access_token",
+        "value": "Please run \"salesforce access token\" first"
+      }
+    ]
+  }
+}

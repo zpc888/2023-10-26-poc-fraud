@@ -52,12 +52,7 @@ public class FraudService {
                 docStore.getStatus().toString(), encoded);
     }
 
-    public Mono<SignedResult> mimicSign(Long docId) throws Exception {
-//        final String callbackOauthUrl = "https://ability-business-3077-dev-ed.scratch.my.salesforce.com/services/oauth2/token";
-//        final String clientId = "3MVG99nUjAVk2edwYTM8ZHhUfVBKY.in7kFNX7ortXNlaHZ2LFiqiOASh8znJ7WtA7ftBnOGogyVcS26.MKIa";
-//        final String clientSecret = "ECAB64013CEC0A2DB944975E3E87228ACEDFDEBDC3382DC2B6723F7D07724950";
-//        final String grantType = "client_credentials";
-//        final String callbackUrl = "https://ability-business-3077-dev-ed.scratch.my.salesforce.com/services/apexrest/fraud/v1/esign/status/callback/after-esigned";
+    public Mono<SignedAndCallbackResult> mimicSign(Long docId) throws Exception {
         Optional<DocStore> byId = docStoreRepository.findById(docId);
         if (!byId.isPresent()) {
             log.error("cannot find document id: {}", docId);
@@ -81,13 +76,14 @@ public class FraudService {
         log.debug("Saved the signed doc with new doc-id = {}", signedDocId);
 
         String base64PDF = Base64.getEncoder().encodeToString(signedPDF);
+        SignedResult signedResult = new SignedResult(docId.toString(), signedDocId, base64PDF);
         CallbackInfo cbi = JSONUtils.fromJSONString(doc.getCallbackInfo(), CallbackInfo.class);
         Mono<String> accessToken = getAccessToken(cbi.oauthUrl(), cbi.grantType(), cbi.clientId(), cbi.clientSecret());
         final String callbackUrl = cbi.callbackUrl();
-        Mono<Map<String, Object>> result = doCallback(accessToken, callbackUrl, docId.toString(), signedDocId, base64PDF);
+        Mono<Map<String, Object>> result = doCallback(accessToken, callbackUrl, signedResult);
         return result.map(m -> {
             log.debug("callback {} response is: {}", callbackUrl, m);
-            return new SignedResult(docId.toString(), signedDocId, base64PDF);
+            return new SignedAndCallbackResult(callbackUrl, signedResult, m);
         });
     }
 
@@ -110,13 +106,12 @@ public class FraudService {
         return accessToken;
     }
 
-    private Mono<Map<String, Object>> doCallback(Mono<String> accessToken, String callbackUrl,
-                                                 String docId, String signedDocId, String base64PDF) {
+    private Mono<Map<String, Object>> doCallback(Mono<String> accessToken, String callbackUrl, SignedResult signedResult) {
         WebClient client = WebClient.create(callbackUrl);
         Map<String, Object> reqBody = new LinkedHashMap<>();
-        reqBody.put("documentId", docId);
-        reqBody.put("signedDocumentId", signedDocId);
-        reqBody.put("signedBase64Content", base64PDF);
+        reqBody.put("documentId", signedResult.documentId());
+        reqBody.put("signedDocumentId", signedResult.signedDocumentId());
+        reqBody.put("signedBase64Content", signedResult.signedBase64Content());
         Mono<Map<String, Object>> ret = accessToken.flatMap(token -> {
             return client.post()
                     .headers(h -> h.set("Content-Type", "application/json"))
@@ -127,6 +122,17 @@ public class FraudService {
                         final int statusCode = clientResponse.statusCode().value();
                         if (statusCode >= 400) {
                             log.error("callback response status: {}", clientResponse.statusCode().value());
+                            Map<String, Object> errorResponse = new LinkedHashMap<>();
+                            errorResponse.put("callbackErrorStatusCode", statusCode + "");
+                            if (statusCode >= 500) {
+                                return clientResponse.bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {
+                                }).map(list -> {
+                                    errorResponse.put("callbackErrorResponseBody", list);
+                                    return errorResponse;
+                                });
+                            } else {
+                                return Mono.just(errorResponse);
+                            }
                         }
                         return clientResponse.bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
                         });

@@ -2,9 +2,10 @@ package com.prot.poc.fraud.control;
 
 import com.prot.poc.fraud.entity.DocStore;
 import com.prot.poc.fraud.model.DocumentResult;
-import com.prot.poc.fraud.model.SignedResult;
+import com.prot.poc.fraud.model.SignedAndCallbackResult;
 import com.prot.poc.fraud.repository.DocStoreRepository;
 import com.prot.poc.fraud.service.FraudService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,7 @@ public class DocumentController {
 
     @CrossOrigin
     @GetMapping(value = "document-views/{docId}", produces = {"application/pdf"})
+    @Operation(description = "View PDF content from browser, or save-as PDF file in binary data")
     public Mono<Void> viewDocument(@PathVariable Long docId, @Parameter(hidden = true) ServerHttpResponse response) {
 //        DocStore doc = mockDocWithFixedPDFData();
 
@@ -59,6 +61,7 @@ public class DocumentController {
     }
 
     @GetMapping("/documents/{docId}")
+    @Operation(description = "get document information including base64 encoded PDF content")
     public Mono<DocumentResult> getDocumentContentAndStatus(@PathVariable Long docId, @Parameter(hidden = true) ServerHttpResponse response) {
         return getDocumentById(docId, response, true);
     }
@@ -76,6 +79,7 @@ public class DocumentController {
     }
 
     @GetMapping("/document-statuses/{docId}")
+    @Operation(description = "get document status without base64 encoded PDF content")
     public Mono<DocumentResult> getDocumentStatusOnly(@PathVariable Long docId, @Parameter(hidden = true) ServerHttpResponse response) {
         return getDocumentById(docId, response, false);
     }
@@ -86,10 +90,12 @@ public class DocumentController {
     }
 
     @GetMapping("/document-signs/{docId}")
-    public Mono<SignedResult> mimicSigned(@PathVariable Long docId, @Parameter(hidden = true) ServerHttpResponse response) {
+    @Operation(description = "mimic to sign a document and callback salesforce to notify sign is completed")
+    public Mono<SignedAndCallbackResult> mimicSigned(@PathVariable Long docId, @Parameter(hidden = true) ServerHttpResponse response) {
         try {
-            Mono<SignedResult> result = fraudGenAndSign.mimicSign(docId);
-            return result.switchIfEmpty(httpError(response, HttpStatus.NOT_FOUND));
+            Mono<SignedAndCallbackResult> result = fraudGenAndSign.mimicSign(docId);
+            return result.hasElement().
+                    flatMap(yes -> yes ? result : httpError(response, HttpStatus.NOT_FOUND));
         } catch (Exception ex) {
             throw new RuntimeException("Fail to sign document: " + docId, ex);
         }

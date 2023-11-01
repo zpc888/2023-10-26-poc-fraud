@@ -1,0 +1,95 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+entity Fraud {
+  * Id: Auto-generated
+  --
+  * Fraud_Number: Auto-generated
+  * Fraud_Reason: Text(128)
+  Other_Reason_Detail: Text(64)
+  * Status: Text(16)
+  Approval_Status: Text(16)
+  Security_Note:  Text(4096)
+}
+note left of Fraud::Fraud_Reason
+Dropdown values:
+    Fraud Reason 1
+    Fraud Reason 2
+    Fraud Reason 3
+    Other
+end note
+note left of Fraud::Other_Reason_Detail
+    Mandatory when
+    Fraud_Reason = Other
+end note
+note right of Fraud::Status
+Dropdown values:
+    Pending
+    Submitted
+    Closed
+    Verified
+end note
+note right of Fraud::Approval_Status
+Dropdown values:
+    Pending
+    Approved
+end note
+
+entity Fraud_Item {
+  * Id: Auto-generated
+  --
+  * Item_Order: Number(2, 0)
+  * TX_Date: DateTime
+  * Merchant: Text(64)
+  * Card_Number: Text(16)
+  * Amount: Currency(16, 2)
+}
+
+entity Fraud_Attestation_Doc {
+  * Id: Auto-generated
+  --
+  * Document_ID: Text(64)
+  Signed_Document_ID: Text(64)
+  Sign_Status: Text(16)
+}
+note left of Fraud_Attestation_Doc::Sign_Status
+Dropdown values:
+    Draft
+    In Process
+    Completed
+end note
+
+entity Client_Credit_Report {
+  * Id: Auto-generated
+  --
+  * Credit_Score: Text(32)
+  * Credit_Date:  Text(32)
+  * Report_PDF_ID:  Text(64)
+}
+
+note right of Client_Credit_Report::Credit_Date
+   value should store as-is
+   from credit bureau api response
+
+   normally in date time format
+end note
+
+Account ||--o{ Fraud
+Account ||--o| Client_Credit_Report
+note left on link  #lightblue
+ or 1 to 0..n relationship is ok too
+end note
+Fraud ||--|{ Fraud_Item
+Fraud ||--o| Fraud_Attestation_Doc
+
+note top of Account #lightgreen
+For Fraud / Security Team, it should show how many
+active vs closed Fraud for that client on UI
+end note
+
+note top of Fraud #lightgreen
+For Frontline / Fraud / Security Team, it should always
+total fraud amount of all fraud transaction items on UI
+end note
+
+@enduml

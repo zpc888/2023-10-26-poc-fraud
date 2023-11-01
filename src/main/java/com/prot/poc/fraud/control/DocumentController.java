@@ -2,6 +2,7 @@ package com.prot.poc.fraud.control;
 
 import com.prot.poc.fraud.entity.DocStore;
 import com.prot.poc.fraud.model.DocumentResult;
+import com.prot.poc.fraud.model.SignedResult;
 import com.prot.poc.fraud.repository.DocStoreRepository;
 import com.prot.poc.fraud.service.FraudService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -85,9 +86,9 @@ public class DocumentController {
     }
 
     @GetMapping("/document-signs/{docId}")
-    public Mono<DocumentResult> mimicSigned(@PathVariable Long docId, @Parameter(hidden = true) ServerHttpResponse response) {
+    public Mono<SignedResult> mimicSigned(@PathVariable Long docId, @Parameter(hidden = true) ServerHttpResponse response) {
         try {
-            Mono<DocumentResult> result = fraudGenAndSign.mimicSign(docId);
+            Mono<SignedResult> result = fraudGenAndSign.mimicSign(docId);
             return result.switchIfEmpty(httpError(response, HttpStatus.NOT_FOUND));
         } catch (Exception ex) {
             throw new RuntimeException("Fail to sign document: " + docId, ex);

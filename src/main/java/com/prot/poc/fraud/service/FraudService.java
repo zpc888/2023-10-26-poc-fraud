@@ -52,7 +52,7 @@ public class FraudService {
                 docStore.getStatus().toString(), encoded);
     }
 
-    public Mono<DocumentResult> mimicSign(Long docId) throws Exception {
+    public Mono<SignedResult> mimicSign(Long docId) throws Exception {
 //        final String callbackOauthUrl = "https://ability-business-3077-dev-ed.scratch.my.salesforce.com/services/oauth2/token";
 //        final String clientId = "3MVG99nUjAVk2edwYTM8ZHhUfVBKY.in7kFNX7ortXNlaHZ2LFiqiOASh8znJ7WtA7ftBnOGogyVcS26.MKIa";
 //        final String clientSecret = "ECAB64013CEC0A2DB944975E3E87228ACEDFDEBDC3382DC2B6723F7D07724950";
@@ -87,8 +87,7 @@ public class FraudService {
         Mono<Map<String, Object>> result = doCallback(accessToken, callbackUrl, docId.toString(), signedDocId, base64PDF);
         return result.map(m -> {
             log.debug("callback {} response is: {}", callbackUrl, m);
-            DocumentResult finalResult = new DocumentResult(signedDocId, "Completed", base64PDF);
-            return finalResult;
+            return new SignedResult(docId.toString(), signedDocId, base64PDF);
         });
     }
 

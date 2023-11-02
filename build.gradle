@@ -28,6 +28,14 @@ dependencies {
 //	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 	implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.2.0'
 	implementation 'org.apache.pdfbox:pdfbox:3.0.0'
+
+	// barcode libs
+	implementation group: 'com.google.zxing', name: 'core', version: '3.5.2'
+	implementation group: 'com.google.zxing', name: 'javase', version: '3.5.2'
+
+	// docusign lib
+	implementation 'com.docusign:docusign-esign-java:3.18.0'
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'

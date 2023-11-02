@@ -1,7 +1,14 @@
 package com.prot.poc.fraud.pdfgen;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.oned.EAN13Writer;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.prot.poc.fraud.model.FraudAttestation;
 import com.prot.poc.fraud.model.FraudItem;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -10,11 +17,14 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import org.apache.pdfbox.util.Matrix;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -28,6 +38,7 @@ import java.util.stream.Collectors;
  * @Author: <a href="mailto: pengcheng.zhou@gmail.com">PengCheng Zhou</a>
  * @Created: 2023-10-26T21:43 Thursday
  */
+@Slf4j
 @Service
 public class FraudAttestationPDFGen {
     public byte[] addWatermarkSign(byte[] pdf, String clientName) throws Exception {
@@ -114,7 +125,7 @@ public class FraudAttestationPDFGen {
         stream.endText();
 
         // footer
-        renderFooter(stream, contentFontHeight, pageWidth, leading);
+        renderFooter(doc, vo, stream, contentFontHeight, pageWidth, leading);
 
         // transaction item tables
         renderTransactionItem(stream, vo, pageHeight);
@@ -123,6 +134,7 @@ public class FraudAttestationPDFGen {
 
         return PDFGenUtils.saveDocToByteArray(doc);
     }
+
 
     private void renderTransactionItem(PDPageContentStream stream, FraudAttestation vo, float pageHeight) throws Exception {
         PDFTableHeader txDateHeader = new PDFTableHeader("Transaction Date", 120, Alignment.LEFT);
@@ -166,7 +178,7 @@ public class FraudAttestationPDFGen {
         stream.showText("If you are not the initiator of these transaction, please sign to confirm.");
     }
 
-    private static void renderFooter(PDPageContentStream stream, float contentFontHeight, float pageWidth, float leading) throws IOException {
+    private static void renderFooter(PDDocument doc, FraudAttestation vo, PDPageContentStream stream, float contentFontHeight, float pageWidth, float leading) throws IOException {
         // footer line seperator
         stream.setNonStrokingColor(PDFGenUtils.BG_COLOR);
         stream.addRect(0, (float)(contentFontHeight * 1.6), pageWidth, 2);
@@ -178,7 +190,39 @@ public class FraudAttestationPDFGen {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String footer = LocalDateTime.now().format(formatter);
         float x = pageWidth - PDFGenUtils.getTextFontWidth(footer, footerFont, footerFontSize) - leading;
-        PDFGenUtils.showSingleLine(stream, footer, x, 20, footerFont, footerFontSize, Color.BLACK);
+        float y = 20;
+        PDFGenUtils.showSingleLine(stream, footer, x, y, footerFont, footerFontSize, Color.BLACK);
+
+        // draw barcode
+//        int imgWidth = 300;
+//        int imgHeight = 100;
+//        BufferedImage barcodeImg = genBarcodeBytes(vo, imgWidth, imgHeight);
+        try {
+            int imgWidth = 200;
+            int imgHeight = 200;
+            BufferedImage barcodeImg = genQRCode(vo, imgWidth, imgHeight);
+            PDImageXObject barcode = LosslessFactory.createFromImage(doc, barcodeImg);
+            stream.drawImage(barcode, 0, y + 12);
+        } catch (WriterException we) {
+            log.error("fail to generate qr code for " + vo.fraud().fraudNumber(), we);
+        }
     }
 
+    private static BufferedImage genQRCode(FraudAttestation vo, int width, int height) throws WriterException {
+        String barcodeText = vo.fraud().fraudNumber() + " " + vo.fraud().clientName();
+        QRCodeWriter barcodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix =
+                barcodeWriter.encode(barcodeText, BarcodeFormat.QR_CODE, width, height);
+        return MatrixToImageWriter.toBufferedImage(bitMatrix);
+    }
+
+    private static BufferedImage genBarcodeEAN13(FraudAttestation vo, int width, int height) {
+        String barcodeText = vo.fraud().fraudNumber() + " " + vo.fraud().clientName();
+        if (barcodeText.length() != 12 && barcodeText.length() != 13) {
+            // normalize to 12 or 13 digits         // TODO:
+        }
+        EAN13Writer ean13Writer = new EAN13Writer();
+        BitMatrix bitMatrix = ean13Writer.encode(barcodeText, BarcodeFormat.EAN_13, width, height);
+        return MatrixToImageWriter.toBufferedImage(bitMatrix);
+    }
 }

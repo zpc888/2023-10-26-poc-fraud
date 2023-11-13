@@ -1,7 +1,10 @@
-package com.prot.poc.fraud.model;
+package com.prot.poc.common;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.lang.reflect.ParameterizedType;
 
 /**
  * @Author: <a href="mailto: pengcheng.zhou@gmail.com">PengCheng Zhou</a>
@@ -9,6 +12,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class JSONUtils {
     private JSONUtils() {
+    }
+
+    public static <T> T fromJSONString(String str, TypeReference<T> type) {
+        if (str == null) {
+            return null;
+        }
+        ObjectMapper om = new ObjectMapper();
+        try {
+            T t = om.readValue(str, type);
+            return t;
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static <T> T fromJSONString(String str, Class<T> type) {

@@ -2,7 +2,6 @@ package com.prot.poc.fraud.sec;
 
 import com.prot.poc.fraud.config.VendorsConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -11,6 +10,8 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
+import java.util.Set;
+
 /**
  * @Author: <a href="mailto: pengcheng.zhou@gmail.com">PengCheng Zhou</a>
  * @Created: 2023-10-28T17:50 Saturday
@@ -18,7 +19,7 @@ import reactor.core.publisher.Mono;
 @Component
 public class VendorCheckFilter implements WebFilter {
     private String apiPathPrefix = "/api";
-    private String excludedPath = "/document-views/";
+    private Set<String> excludedPathes = Set.of("/document-views/", "/esign-event-listener");
 
     private final VendorsConfig vendorsConfig;
     private final String httpHeaderNameForVendorClientId;
@@ -35,7 +36,7 @@ public class VendorCheckFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
-        if (path.startsWith(apiPathPrefix) && !path.contains(excludedPath)) {
+        if (isNotExcluded(path)) {
             HttpHeaders headers = exchange.getRequest().getHeaders();
             String clientId = headers.getFirst(httpHeaderNameForVendorClientId);
             String clientSecret = headers.getFirst(httpHeaderNameForVendorClientSecret);
@@ -48,5 +49,9 @@ public class VendorCheckFilter implements WebFilter {
             }
         }
         return chain.filter(exchange);
+    }
+
+    private boolean isNotExcluded(String path) {
+        return path.startsWith(apiPathPrefix) && excludedPathes.stream().noneMatch(ep -> path.contains(ep));
     }
 }

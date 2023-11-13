@@ -116,12 +116,22 @@ public class FraudAttestationPDFGen {
         continueToRenderFraudReason(vo, stream, contentFontHeight, lineSpan);
 
         // signature
-        stream.newLineAtOffset(200, (float)(-12 * contentFontHeight * lineSpan));                // offset x and y
+        stream.newLineAtOffset(200, (float)(-12 * contentFontHeight * lineSpan));             // offset x and y
         stream.showText("Signature: ");
         stream.newLineAtOffset(0, (float)(-2 * contentFontHeight * lineSpan));                // offset x and y
         stream.showText("Printed Name: ");
         stream.newLineAtOffset(0, (float)(-2 * contentFontHeight * lineSpan));                // offset x and y
         stream.showText("Signed Date: ");
+
+        // esign anchor
+        stream.setNonStrokingColor(Color.WHITE);
+        stream.newLineAtOffset(110, (float)(4 * contentFontHeight * lineSpan));             // offset x and y
+        stream.showText("_signature_");
+        stream.newLineAtOffset(0, (float)(-2 * contentFontHeight * lineSpan));                // offset x and y
+        stream.showText("_printed_name_");
+        stream.newLineAtOffset(0, (float)(-2 * contentFontHeight * lineSpan));                // offset x and y
+        stream.showText("_signed_date_");
+
         stream.endText();
 
         // footer

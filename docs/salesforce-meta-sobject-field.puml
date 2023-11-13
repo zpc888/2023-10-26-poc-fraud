@@ -1,0 +1,165 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+title "Salesforce EntityDefinition and FieldDefinition"
+
+entity EntityDefinition {
+    * Id: id
+    DurableId: string
+    LastModifiedDate: datetime
+    LastModifiedById: reference
+    QualifiedApiName: string
+    NamespacePrefix: string
+    DeveloperName: string
+    MasterLabel: string
+    Label: string
+    PluralLabel: string
+    DefaultCompactLayoutId: string
+    IsCustomizable: boolean
+    IsApexTriggerable: boolean
+    IsWorkflowEnabled: boolean
+    IsProcessEnabled: boolean
+    IsCompactLayoutable: boolean
+    KeyPrefix: boolean
+    IsCustomSetting: boolean
+    IsDeprecatedAndHidden: boolean
+    IsReplicateable: boolean
+    IsRetrieveable: boolean
+    IsSearchLayoutable: boolean
+    IsSearchable: boolean
+    IsTriggerable: boolean
+    IsIdEnabled: boolean
+    IsEverCreatable: boolean
+    IsEverUpdatable: boolean
+    IsEverDeletable: boolean
+    IsFeedEnabled: boolean
+    IsQueryable: boolean
+    IsMruEnabled: boolean
+    DetailUrl: url
+    EditUrl: url
+    NewUrl: url
+    EditDefinition: url
+    HelpSettingPageName: String
+    HelpSettingPageUrl: url
+    RunningUserEntityAccessId: String
+    PublisherId: String
+    IsLayoutable: boolean
+    RecordTypesSupported: complexvalue
+    InternalSharingModel: picklist
+    ExternalSharingModel: picklist
+    HasSubtypes: boolean
+    IsSubtype: boolean
+    IsAutoActivityCaptureEnabled: boolean
+    IsInterface: boolean
+    ImplementsInterfaces: string
+    ImplementedBy: string
+    ExtendsInterfaces: string
+    ExtendedBy: string
+    DefaultImplementation: string
+}
+
+entity FieldDefinition {
+    * Id: id
+    DurableId: string
+    QualifiedApiName: string
+    EntityDefinitionId: string
+    NamespacePrefix: string
+    DeveloperName: string
+    MasterLabel: string
+    Label: string
+    Length: int
+    DataType: string
+    ServiceDataTypeId: String
+    ValueTypeId: String
+    ExtraTypeInfo: String
+    IsCalculated: boolean
+    IsHighScaleNumber: boolean
+    IsHtmlFormatted: boolean
+    IsNameField: boolean
+    IsNillable: boolean
+    IsWorkflowFilterable: boolean
+    IsCompactLayoutable: boolean
+    Precision: int
+    Scale: int
+    IsFieldHistoryTracked: boolean
+    IsIndexed: boolean
+    IsApiFilterable: boolean
+    IsApiSortable: boolean
+    IsListFilterable: boolean
+    IsListSortable: boolean
+    IsApiGroupable: boolean
+    IsListVisible: boolean
+    ControllingFieldDefinitionId: string
+    LastModifiedDate: datetime
+    LastModifiedById: reference
+    PublisherId: string
+    RunningUserFieldAccessId: string
+    RelationshipName: string
+    ReferenceTo: complexvalue
+    ReferenceTargetField: String
+    IsCompound: boolean
+    IsSearchPrefilterable: boolean
+    IsPolymorphicForeignKey: boolean
+    BusinessOwnerId: reference
+    BusinessStatus: picklist
+    SecurityClassification: picklist
+    ComplianceGroup: multipicklist
+    Description: textarea
+}
+
+enum Picklist {
+
+
+<font color="Blue"><b>EntityDefinition</b></font>
+==
+<b>InternalSharingModel </b>
+--
+    None = Private
+    Read = Read Only
+    Edit = Read/Write
+    ControlledByLeadOrContact
+    ControlledByCampaign
+==
+
+<b>ExternalSharingModel </b>
+--
+    None = Private
+    Read = Read Only
+    Edit = Read/Write
+    ControlledByLeadOrContact
+    ControlledByCampaign
+==
+
+
+<font color="Blue"><b>FieldDefinition</b></font>
+==
+<b>BusinessStatus</b>
+--
+    Active
+    DeprecatedCandidate
+    Hidden
+==
+
+<b>SecurityClassification </b>
+--
+    Public
+    Internal
+    Confidential
+    Restricted
+    MissionCritical
+==
+
+<b>ComplianceGroup</b>
+--
+    PII
+    HIPAA
+    GDPR
+    PCI
+    COPPA
+    CCPA
+
+}
+
+EntityDefinition ||-right-o{ FieldDefinition
+
+@enduml

@@ -5,10 +5,15 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.HeaderParameter;
+import io.swagger.v3.oas.models.parameters.Parameter;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: <a href="mailto: pengcheng.zhou@gmail.com">PengCheng Zhou</a>
@@ -16,7 +21,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class OpenApiConfig {
-    private static String notToAddHeadersForOperation = "viewDocument";
+    private static Set<String> notToAddHeadersForOperations = Set.of("viewDocument", "signEventListener");
 
     @Bean
     public OpenAPI pocFraudOpenAPI(@Autowired VendorsConfig vendorsConfig) {
@@ -42,10 +47,13 @@ public class OpenApiConfig {
     public OpenApiCustomizer addGloablVendorAuthHeaders(@Autowired VendorsConfig vendorsConfig) {
         return api -> api.getPaths().values().stream()
                 .flatMap(pathItem -> pathItem.readOperations().stream())
-                .filter(operation -> !notToAddHeadersForOperation.equals(operation.getOperationId()))
+                .filter(operation -> !notToAddHeadersForOperations.contains(operation.getOperationId())
+                        && notToAddHeadersForOperations.stream().map(op -> op + "_")   // when supporting multiple http method, it will add _1, _2, etc for operationId
+                        .noneMatch(op -> operation.getOperationId().startsWith(op)))
                 .forEach(operation -> {
                     // remove first if global headers are referred by operations already
-                    operation.getParameters().removeIf(param -> {
+                    List<Parameter> params = operation.getParameters() == null ? Collections.emptyList() : operation.getParameters();
+                    params.removeIf(param -> {
                         String name = param.getName();
                         return name.equals(vendorsConfig.getAuth().getClientIdHeaderName())
                                 || name.equals(vendorsConfig.getAuth().getClientSecretHeaderName());

@@ -1,0 +1,105 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+title nDESIGN namespace
+
+entity Layout {
+    Name: Text-80
+    OwnerId: Lookup-User-Group
+    Generator_Class: Text-255
+    LookupKey: Text-18 External-ID Unique Case Insensitive
+}
+entity Screen {
+    Name: Text-80
+    OwnerId: Lookup-User-Group
+    Disable_Print: Checkbox
+    LookupKey: Text-18 External-ID Unique Case Insensitive
+    Show_Link_To_Context_Object: Checkbox
+}
+entity Screen_Section {
+    Name: Text-80
+    Break_Page_After: Checkbox
+    Break_Page_Before: Checkbox
+    Default_Editable: Checkbox
+    Default_Rendered: Checkbox
+    Instruction: Text-255
+    Disable_Print: Checkbox
+    Display_Order: Number-18_0
+    Display_Toggle_Effect: Picklist
+    Display_Toggle_Header: Checkbox
+    Display_Toggle_Link: Checkbox
+    Headless: Checkbox
+    Inactive: Checkbox
+    Instructions_Text: LongText-32768
+    Is_Editable: Checkbox
+    Layout: Lookup-Layout
+    LookupKey: Text-18 External-ID Unique Case Insensitive
+    Rendered_View: LongText-131072
+    Screen: MasterDetail-Screen
+    Screen_View: Lookup-Screen_View
+    Section_Resource: Picklist
+    sObject_Type: Picklist
+    Widget: Lookup-Widget
+}
+entity Section_Configuration {
+    Name: AutoNumber
+    Section_Resource_Class: Text-1
+    Display_Order: Number-16_2
+    Field_Set_Key: Text-255
+    Layout: Lookup-Layout
+    LookupKey: Text-18 External-ID Unique Case Insensitive
+    Parent_Configuration: Lookup-Section_Configuration
+    Parent_Relationship_Name: Text-255
+    Screen_Section: MasterDetail-Screen_Section
+    Section_Header: Text-255
+    sObject_Type: Text-255
+}
+entity View {
+    Name: Text-80
+    OwnerId: Lookup-User-Group
+    Edit:  RichText-131072
+    LookupKey: Text-18 External-ID Unique Case Insensitive
+    Preview:  RichText-131072
+    Read_Only:  RichText-131072
+}
+entity Widget {
+    Name: Text-80
+    OwnerId: Lookup-User-Group
+    Data: RichText-131072
+    Icon: LongText-32768
+    Is_Knockout: Formula-Checkbox
+    Is_Narrative: Formula-Checkbox
+    LookupKey: Text-18 External-ID Unique Case Insensitive
+    Parameters: LongText-32768
+    Script_Resource_One: Text-255
+    Script_Resource_...: Text-255
+    Script_Resource_Ten: Text-255
+    Stylesheet_Resource_One: Text-255
+    Stylesheet_Resource_...: Text-255
+    Stylesheet_Resource_Ten: Text-255
+    Type: Picklist
+    View: RichText-32768
+}
+entity Route {
+    Name: Text-80
+    OwnerId: Lookup-User-Group
+    App: Text-255
+    Banner: Text-255
+    Body: Text-255
+    Group: Text-255
+    Icon_Class: Text-255
+    Is_Hidden: Checkbox
+    Order: Number-9_0
+    Parent_App: Text-255
+    Side_Bar: Text-255
+    Top_Bar: Text-255
+}
+
+Screen_Section }o--|| Screen
+Screen_Section }o--o| View
+Screen_Section }o--o| Widget
+Screen_Section }o--o| Layout
+Screen_Section ||--o{ Section_Configuration
+Section_Configuration }o--o| Section_Configuration
+Section_Configuration }o--o| Layout
+@enduml

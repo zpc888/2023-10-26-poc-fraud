@@ -4,7 +4,7 @@ import com.prot.poc.fraud.entity.DocStatus;
 import com.prot.poc.fraud.entity.DocStore;
 import com.prot.poc.fraud.model.CallbackInfo;
 import com.prot.poc.fraud.model.Client;
-import com.prot.poc.fraud.model.JSONUtils;
+import com.prot.poc.common.JSONUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

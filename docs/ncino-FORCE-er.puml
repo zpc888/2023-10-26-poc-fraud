@@ -1,0 +1,276 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+title nFORCE namespace
+
+entity Workflow_Orchestration {
+    Name: Text-80
+    OwnerId: Lookup-User-Group
+    Context_Id: Text-18
+    Custom_Identity: Text-255 External-Id Unique Case-Sensitive
+    Entry_Source: Text-255
+    lookupKey: Text-255 External-Id Unique C.I.
+    Message: Text-255
+    Orchestration_Step: Text-255
+    State: LongText-131702
+}
+
+entity Group {
+    Group-UI
+    --
+    Name: Text-80
+    OwnerId: Lookup-User-Group
+    Answer_Context: Picklist
+    App: Text-255 Unique C.I.
+    AutorabitExtId__c: Text-18 External-Id Unique C.I.
+    Category: Picklist
+    Context_Type: Text-255
+    Default_Collapse_Parent_Navigation: Checkbox
+    Description: Text-255
+    Is_Archived: Checkbox
+    Is_Portal_Enabled: Checkbox
+    Is_Questionnaire_Enabled: Checkbox
+    Layout: Lookup-Layout
+    lookupKey: Text-255 External-Id Unique C.I.
+    Parent_Group: Lookup-Group
+    Screen: Lookup-Screen
+    Taxonomy_Id: Text-255 external
+}
+
+entity Screen {
+    Name: Text-80
+    OwnerId: Lookup-User-Group
+    nPortal__Add_Multi_Record_Display_Icon__c: LongText-2083
+    AutorabitExtId__c: Text-18 External-Id Unique C.I.
+    Disable_Print: Checkbox
+    Disable_Ready_Only_View: Checkbox
+    lookupKey: Text-255 External-Id Unique C.I.
+    nPortal__Maximum_Number_Of_Records__c: Number-3_0
+    nPortal__Minimum_Number_Of_Records__c: Number-3_0
+    nPortal__QA_Review_Multiple_Record_Entity_Label__c: Text-255
+    Show_Link_To_Context_Object: Checkbox
+}
+
+entity Route {
+    Name: Text-80
+    OwnerId: Lookup-User-Group
+    Group: Text-255
+    Is_Hidden: Checkbox
+    Order: Number-9_0
+    Parent_App: Text-255
+    Toolbar: Text-255
+    App: Text-255 Unique C.I.
+    AutorabitExtId__c: Text-18 External-Id Unique C.I.
+    Body: Text-255
+    Boy_Type: Picklist
+    Description: Text-255
+    Icon_Class: Text-255
+    lookupKey: Text-255 External-Id Unique C.I.
+    Navigation: Text-255
+    nPortal__Search_Object_Filter__c: Text-255
+    nPortal__Search_Object_Type__c: Text-255
+    nPortal__Search_Results_Fieldset__c: Text-255
+    nPortal__Search_Select_Active_Text__c: Text-255
+    nPortal__Search_Select_Text__c: Text-255
+    Parameters: LongText-2048
+    nPortal__Portal_Header_Text__c: Text-255
+    nPortal__Portal_Icon_Path__c: Text-255
+    nPortal__Portal_Subheader_Text__c: LongText-32000
+    Screen: Lookup-Screen
+    Sub_Navigation: Text-255
+    Taxonomy_Id: Text-255 External-Id
+    Topbar: Text-255
+}
+entity Route_Group {
+    Name: Auto Number
+    OwnerId: Lookup-User-Group
+    AutorabitExtId__c: Text-18 External-Id Unique C.I.
+    Conditional_Display_Criteria: LongText-2048
+    Conditional_Display_Criteria_Context: Text-255
+    Conditional_Rendering_Help_Syntax__c: LongText-32768
+    Group: Lookup-Group
+    Has_Visibility_Criteria: Checkbox
+    Is_Default_Context_Child: Checkbox
+    Is_Forward_Navigation_Disabled: Checkbox
+    Is_Hidden: Checkbox
+    Is_Portal_Enabled: Checkbox
+    lookupKey: Text-255 External-Id Unique C.I.
+    nPortal__OA_Auto_Decision_Required__c: Checkbox
+    nPortal__OA_Business_Credit_Pull_Required__c: Checkbox
+    nPortal__OA_Credit_Pull_Required__c: Checkbox
+    Orchestration_Step: Lookup-Workflow_Orchestration
+    Order: Number-9_0
+    Parent_Route: Lookup-Route
+    ParentRouteApp__c: Formula-Text
+    Primary_Button_Text: Text-255
+    Question_Group: Lookup-Group
+    Route: Lookup-Route
+    RouteApp__c: Formula-Text
+    Visibility_Criteria: Text-255
+}
+
+entity Screen_Section {
+    Name: Text-80
+    Display_Order: Number-18_0
+    Display_Toggle_Effect: Picklist
+    Display_Toggle_Header: Checkbox
+    Display_Toggle_Link: Checkbox
+    Headless: Checkbox
+    Inactive: Checkbox
+    Instructions_Text: LongText-32768
+    Is_Editable: Checkbox
+    Layout: Lookup-Layout
+    lookupKey: Text-255 external-Id Unique C.I.
+    Number_of_Columns: Number-2_0
+    Parent_Screen_Section: Lookup-Screen_Section
+    nPortal__Portal_Header_Text__c: Text-255
+    nPortal__Portal_Subheader_Text__c: LongText-32000
+    Reference__c: Text-100
+    Screen: MasterDetail-Screen
+    Screen_View: Lookup-Screen_View
+    Section_Resource: Picklist
+    sObject_Type: Picklist
+    Validation_Service: Text-80
+    Widget: Lookup-Widget
+}
+
+entity Section_Configuration {
+    Name: Auto Number
+    AutorabitExtId__c: Text-18 External-Id Unique C.I.
+    Display_Order: Number-16_2
+    Field_Set_Key: Text-255
+    Filter_Criteria: LongText-32768
+    Layout: Lookup-Layout
+    Limit: Number-4_0
+    lookupKey: Text-255 External-Id Unique C.I.
+    Offset_By_Limit: Checkbox
+    Parent_Configuration: Lookup-Section_Configuration
+    Parent_Relationship_Name: Text-255
+    Screen_Section: MasterDetail-Screen_Section
+    Section_Header: Text-255
+    sObject_Type: Text-255
+    Sort_Criteria: LongText-32768
+    Unique: Checkbox
+}
+
+entity Field_Configuration {
+    Extends a field for the given \nobject with additional features.\nCan be optionally tied to Routes.
+    --
+    Name: Auto Number
+    OwnerId: Lookup-User-Group
+    Is_Active: Checkbox
+    Address_Part: Picklist
+    Alternate_Label: Text-255
+    Autocomplete_Attribute_Value: Picklist
+    Conditional_Display_Criteria: LongText-2048
+    Default_Value: Text-255
+    Defined_Picklist_Values: LongText-1000
+    Field_Hint: Text-255
+    Field_Name: Text-255
+    Filter_Criteria: LongText-2048
+    Filter_Display_Name: Text-255
+    Format_Expression: Text-255
+    Format_Message: Text-255
+    Format_Description: Text-255
+    Format_Enabled: Checkbox
+    Is_Conditional_Lookup: Checkbox
+    Is_Editable: Checkbox
+    Is_Filter_active: Checkbox
+    Is_Header: Checkbox
+    Is_Hidden: Checkbox
+    Is_Important: Checkbox
+    Is_Ready_Only: Checkbox
+    Is_Required: Checkbox
+    lookupKey: Text-255 External-Id Unique C.I.
+    Output_Expression: Text-255
+    Picklist_Buttons_Enabled: Checkbox
+    Route: Lookup-Route
+    Screen_Section: Lookup-Screen_Section
+    SLDS_Column_Size: Number-3_0
+    sObject_Name: Text-255
+    Tooltip_Contents: LongText-32000
+    Tooltip_Enabled: Checkbox
+    Tooltip_Text: Text-255
+}
+
+entity View {
+    Name: Auto Number
+    OwnerId: Lookup-User-Group
+    Edit: RichText-131072
+    lookupKey: Text-255 External-Id Unique C.I.
+    Preview: RichText-131072
+    Read_Only: RichText-131072
+}
+
+entity Layout {
+    Name: Text-80
+    OwnerId: Lookup-User-Group
+    Category: Picklist-Multi-Select
+    Generator_Class: Text-255
+    Layout_Description: RichText-131072
+    Layout_Preview_Image: LongText-2083
+    lookupKey: Text-255 External-Id Unique C.I.
+    Visualforce_Page: Text-255
+}
+
+entity Widget {
+    Name: Text-80
+    OwnerId: Lookup-User-Group
+    Data: RichText-131072
+    Icon: LongText-32768
+    Is_Narrative: Formula-Checkbox
+    Is_Angular: Formula-Checkbox
+    Is_Knockout: Formula-Checkbox
+    lookupKey: Text-255 External-Id Unique C.I.
+    Parameters: LongText-32768
+    Script_Resource_One: Text-255
+    Script_Resource_Two: Text-255
+    Script_Resource_...: Text-255
+    Script_Resource_Ten Text-255
+    Stylesheet_Resource_One: Text-255
+    Stylesheet_Resource_Two: Text-255
+    Stylesheet_Resource_...: Text-255
+    Stylesheet_Resource_Ten Text-255
+    Type: Picklist
+    View: RichText-32768
+}
+
+entity Screen_Segment {
+    a junction object for sharing sections among\nCredit Memo's template
+    --
+    Name: Text-80
+    OwnerId: Lookup-User-Group
+    lookupKey: Text-255 External-Id Unique C.I.
+    Order: Number-18_0
+    Screen: Lookup-Screen
+    Screen_Section: Lookup-Screen_Section
+    Type: Picklist
+}
+
+Field_Configuration }o--o| Route
+Field_Configuration }o--o| Screen_Section
+
+Screen_Segment }o--o| Screen
+Screen_Segment }o--o| Screen_Section
+
+Section_Configuration }o--|| Screen_Section
+Section_Configuration }o--o| Layout
+Section_Configuration }o--o| Section_Configuration: parent
+
+Screen_Section }o-up-|| Screen
+Screen_Section }o--o| Layout
+Screen_Section }o--o| Screen_Section: Parent
+Screen_Section }o--o| View: Screen_View
+Screen_Section }o--o| Widget
+
+Route_Group }o-left-o| Workflow_Orchestration
+Route_Group }o--o| Group: Group
+Route_Group }o--o| Group: Question_Group
+Route_Group }o--o| Route: Route
+Route_Group }o--o| Route: Parent_Route
+
+Group }o--o| Group: parent-child lookup
+Group }o--o| Screen
+Group }o--o| Layout
+Route }o--o| Screen
+@enduml

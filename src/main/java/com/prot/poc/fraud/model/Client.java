@@ -10,6 +10,6 @@ import jakarta.validation.constraints.NotNull;
 public record Client(
         @NotNull @Schema(description = "Client Id - Salesforce Account Id") String id,
         @NotNull @Schema(description = "Client Full Name - Salesforce Account Name") String fullName,
-        String email,
+        @NotNull String email,
         String phone) {
 }

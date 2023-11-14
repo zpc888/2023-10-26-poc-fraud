@@ -9,7 +9,8 @@ import jakarta.persistence.*;
 @Entity
 @Table(name="DOC_STORE", indexes = {
         // @Index(name = "vendorInfoIdx", columnList = "SOURCE_NUMBER,VENDOR_NAME", unique = true)
-        @Index(name = "vendorInfoIdx", columnList = "SOURCE_NUMBER")
+        @Index(name = "vendorInfoIdx", columnList = "SOURCE_NUMBER"),
+        @Index(name = "signPkgIdx", columnList = "SIGN_PKG_ID", unique = true)
 })
 public class DocStore {
     @Id
@@ -24,6 +25,10 @@ public class DocStore {
 
     @Column(name = "DOC_NAME", nullable = true, length = 120)
     private String docName;
+
+    // For simplicity, sign package and doc is 1-to-1 instead of 1-to-many
+    @Column(name = "SIGN_PKG_ID", nullable = true, length = 48)
+    private String signPackageId;
 
     @Column(name = "DOC_STATUS", nullable = false, length = 16)
     @Enumerated(EnumType.STRING)
@@ -104,5 +109,13 @@ public class DocStore {
 
     public void setCallbackInfo(String callbackInfo) {
         this.callbackInfo = callbackInfo;
+    }
+
+    public String getSignPackageId() {
+        return signPackageId;
+    }
+
+    public void setSignPackageId(String signPackageId) {
+        this.signPackageId = signPackageId;
     }
 }

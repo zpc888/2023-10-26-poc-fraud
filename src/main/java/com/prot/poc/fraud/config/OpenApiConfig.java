@@ -21,7 +21,7 @@ import java.util.Set;
  */
 @Configuration
 public class OpenApiConfig {
-    private static Set<String> notToAddHeadersForOperations = Set.of("viewDocument", "signEventListener");
+    private static Set<String> notToAddHeadersForOperations = Set.of("viewDocument", "signEventListener", "updateSignStatus");
 
     @Bean
     public OpenAPI pocFraudOpenAPI(@Autowired VendorsConfig vendorsConfig) {

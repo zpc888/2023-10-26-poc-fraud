@@ -66,19 +66,25 @@ public class FraudService {
         byte[] signedPDF = attestationPDFGen.addWatermarkSign(doc.getContent(), signer.fullName());
         log.debug("Signed for doc id = {}", docId);
 
+        return saveSignedDocAndNotifySalesforce(doc, signedPDF);
+    }
+
+    public Mono<SignedAndCallbackResult> saveSignedDocAndNotifySalesforce(DocStore unsignedDoc, byte[] signedPDF) {
+        Long docId = unsignedDoc.getId();
         DocStore signedDoc = new DocStore();
         signedDoc.setDocName("Fraud Attestation Report - Signed");
-        signedDoc.setVendorName(doc.getVendorName());
+        signedDoc.setVendorName(unsignedDoc.getVendorName());
         signedDoc.setStatus(DocStatus.SIGNED);
-        signedDoc.setSourceNumber(doc.getSourceNumber());
+        signedDoc.setSourceNumber(unsignedDoc.getSourceNumber());
         signedDoc.setContent(signedPDF);
+        signedDoc.setSignPackageId(unsignedDoc.getSignPackageId() + "/signed");
         docStoreRepository.save(signedDoc);
         String signedDocId = signedDoc.getId().toString();
         log.debug("Saved the signed doc with new doc-id = {}", signedDocId);
 
         String base64PDF = Base64.getEncoder().encodeToString(signedPDF);
         SignedResult signedResult = new SignedResult(docId.toString(), signedDocId, base64PDF);
-        CallbackInfo cbi = JSONUtils.fromJSONString(doc.getCallbackInfo(), CallbackInfo.class);
+        CallbackInfo cbi = JSONUtils.fromJSONString(unsignedDoc.getCallbackInfo(), CallbackInfo.class);
         Mono<String> accessToken = getAccessToken(cbi.oauthUrl(), cbi.grantType(), cbi.clientId(), cbi.clientSecret());
         final String callbackUrl = cbi.callbackUrl();
         Mono<Map<String, Object>> result = doCallback(accessToken, callbackUrl, signedResult);
@@ -140,5 +146,11 @@ public class FraudService {
                     });
         });
         return ret;
+    }
+
+    public void insertSignPackage(DocumentResult result) {
+        Optional<DocStore> byId = docStoreRepository.findById(Long.parseLong(result.documentId()));
+        byId.get().setSignPackageId(result.signPackage().getPackageId());
+        docStoreRepository.saveAndFlush(byId.get());
     }
 }

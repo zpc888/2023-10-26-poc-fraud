@@ -19,7 +19,7 @@ import java.util.Set;
 @Component
 public class VendorCheckFilter implements WebFilter {
     private String apiPathPrefix = "/api";
-    private Set<String> excludedPathes = Set.of("/document-views/", "/esign-event-listener");
+    private Set<String> excludedPathes = Set.of("/document-views/", "/esign-event-listener", "/docusign/event/notification");
 
     private final VendorsConfig vendorsConfig;
     private final String httpHeaderNameForVendorClientId;

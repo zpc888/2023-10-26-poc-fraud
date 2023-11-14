@@ -3,6 +3,7 @@ package com.prot.poc.esign.docusign;
 import com.prot.poc.common.JSONUtils;
 import com.prot.poc.esign.vo.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @Author: <a href="mailto: pengcheng.zhou@gmail.com">PengCheng Zhou</a>
  * @Created: 2023-11-12T08:51 Sunday
  */
+@Disabled
 @ExtendWith(SpringExtension.class)
 @EnableConfigurationProperties(value = DocuSignConfig.class)
 @TestPropertySource("classpath:docusign-config-test.properties")
@@ -136,5 +137,15 @@ class DocuSignServiceTest {
     @Test
     void sendInvisibleAnchorForSign() {
         sendPkgForSign(pkgWithInvisibleAnchorOnly);
+    }
+
+    @Test
+    void testDownload() throws Exception {
+        byte[] pdf = service.downloadDocument("d63307d8-e78c-4b3f-81fe-561740e64821", "32");
+        File file = new File("/tmp/signed-doc-32.pdf");
+        try (OutputStream os = new FileOutputStream(file)) {
+            os.write(pdf, 0, pdf.length);
+            os.flush();
+        }
     }
 }

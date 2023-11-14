@@ -1,0 +1,48 @@
+###
+POST https://localhost:8443/api/v1/docusign/event/notification
+
+abc
+
+###
+# https://ec2-3-129-216-253.us-east-2.compute.amazonaws.com:8443/open-api/v3/api-docs
+POST http://127.0.0.1:8080/api/v1/fraud-attestations
+#POST http://3.129.216.253:8080/api/v1/fraud-attestations
+Content-Type: application/json
+x-vendor-client-id: prot
+x-vendor-client-secret: 13523
+#    "phone": "416-845-8844"
+
+{
+  "signer": {
+    "id": "78478487",
+    "fullName": "George Zhou",
+    "email": "PengCheng.Zhou@gmail.com"
+  },
+  "fraud": {
+    "fraudNumber": "FA-0010",
+    "clientName": "George Zhou",
+    "fraudReason": "Other",
+    "otherReasonDetail": "Test Other Reason Detail",
+    "items": [
+      {
+        "txDate": "2023-11-01T20:29:24.885Z",
+        "merchant": "Walmart Scarborough Superstore",
+        "cardNumber": "78376363",
+        "amount": 28.86
+      },
+      {
+        "txDate": "2023-10-20T09:29:24.885Z",
+        "merchant": "Indigo book store",
+        "cardNumber": "78376363",
+        "amount": 186.23
+      }
+    ]
+  },
+  "callback": {
+    "callbackUrl": "https://ability-business-3077-dev-ed.scratch.my.salesforce.com/services/apexrest/fraud/v1/esign/status/callback/after-esigned",
+    "oauthUrl": "https://ability-business-3077-dev-ed.scratch.my.salesforce.com/services/oauth2/token",
+    "grantType": "client_credentials",
+    "clientId": "3MVG99nUjAVk2edwYTM8ZHhUfVBKY.in7kFNX7ortXNlaHZ2LFiqiOASh8znJ7WtA7ftBnOGogyVcS26.MKIa",
+    "clientSecret": "ECAB64013CEC0A2DB944975E3E87228ACEDFDEBDC3382DC2B6723F7D07724950"
+  }
+}

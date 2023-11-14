@@ -22,12 +22,12 @@ Authentication Failure: This event is sent when the recipient fails an authentic
 */
     }
     enum PackageStatus implements ESignEventStatus {
-        Sent,
-        Delivered,
-        Signed,
-        Completed,
-        Declined,
-        Voided
+        sent,
+        delivered,
+        signed,
+        completed,
+        declined,
+        voided
 /*
 https://support.docusign.com/guides/dfs-admin-guide-envelope-recipient-events-ref
 https://developers.docusign.com/esign-rest-api/guides/status-and-error-codes

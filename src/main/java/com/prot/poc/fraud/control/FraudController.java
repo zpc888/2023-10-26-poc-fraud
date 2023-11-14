@@ -5,6 +5,7 @@ import com.prot.poc.esign.vo.*;
 import com.prot.poc.fraud.model.Client;
 import com.prot.poc.fraud.model.DocumentResult;
 import com.prot.poc.fraud.model.FraudAttestation;
+import com.prot.poc.fraud.repository.DocStoreRepository;
 import com.prot.poc.fraud.service.FraudService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +48,7 @@ public class FraudController {
             if ("docusign".equalsIgnoreCase(esignMethod)) {
                 SignPackageResult sendResult = eSignService.sendForSign(buildSignPackage(fraudAttestation, result));
                 result = new DocumentResult(result.documentId(), result.status(), result.base64Content(), sendResult);
+                fraudGenAndSign.insertSignPackage(result);
             }
             return Mono.just(result);
         } catch (Exception ex) {
@@ -78,6 +80,8 @@ public class FraudController {
                 .setEmailBody("After DocuSign, Salesforce status should be auto updated");
         ret.setRecipients(List.of(recipient)).setSignedDocuments(List.of(signDoc))
                 .setRoleToRecipientIds(Collections.singletonMap(role, signer.id()));
+//        ret.addESignEventListener(new ESignEventListener.PackageEventListener()
+//                .setEventStatus(ESignEventStatus.PackageStatus.completed));
         return ret;
     }
 }

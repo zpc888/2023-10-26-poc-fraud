@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.util.Date;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 })
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Data
+@Accessors(chain = true)
 public abstract class ESignEventListener<T extends ESignEventStatus> {
     private String packageCorrelationId;
     private T eventStatus;

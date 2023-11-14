@@ -13,4 +13,7 @@ import java.util.Optional;
 public interface DocStoreRepository extends JpaRepository<DocStore, Long> {
     @Query("SELECT d FROM DocStore d WHERE d.sourceNumber = :sourceNumber and d.vendorName = :vendorName")
     Optional<DocStore> findDocByVendorInfo(String sourceNumber, String vendorName);
+
+    @Query("SELECT d FROM DocStore d WHERE d.signPackageId = :signPackageId")
+    Optional<DocStore> findDocBySignPackageId(String signPackageId);
 }

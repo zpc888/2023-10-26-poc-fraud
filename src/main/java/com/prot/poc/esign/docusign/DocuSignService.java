@@ -55,6 +55,27 @@ public class DocuSignService implements ESignService {
         }, specificUserId);
     }
 
+    @Override
+    public byte[] downloadDocument(String packageId, String docId) {
+        return downloadDocument(packageId, docId, null);
+    }
+    public byte[] downloadDocument(String packageId, String docId, String specificUserId) {
+        return withEnvelopesApi((envelopesApi, account) -> {
+            return doDownloadDocument(envelopesApi, account, packageId, docId);
+        }, specificUserId);
+    }
+
+    private byte[] doDownloadDocument(EnvelopesApi envelopesApi, OAuth.Account account, String pkgId, String docId) {
+        try {
+            byte[] data = envelopesApi.getDocument(account.getAccountId(), pkgId, docId);
+            return data;
+        } catch (Exception ex) {
+            String errMsg = "fail to download docusign package '" + pkgId + "' document '" + docId + "'";
+            log.error(errMsg, ex);
+            throw new AppException(errMsg, ex);
+        }
+    }
+
     <T> T withEnvelopesApi(BiFunction<EnvelopesApi, OAuth.Account, T> handler) {
         return withEnvelopesApi(handler, null);
     }

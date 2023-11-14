@@ -9,4 +9,5 @@ import com.prot.poc.esign.vo.SignPackageResult;
  */
 public interface ESignService {
     SignPackageResult sendForSign(SignPackage pkg);
+    byte[] downloadDocument(String packageId, String docId);
 }

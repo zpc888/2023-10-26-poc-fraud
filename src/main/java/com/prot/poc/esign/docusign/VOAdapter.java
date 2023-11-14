@@ -48,12 +48,18 @@ public class VOAdapter {
         if (!CollectionUtils.isEmpty(pkg.getRecipientEventListeners())) {
             pkg.getRecipientEventListeners().stream().map(VOAdapter::buildRecipientEvent).forEach(ret::addRecipientEventsItem);
         }
+        ret.setRequireAcknowledgment("true");
+        ConnectEventData eventData = new ConnectEventData();
+        eventData.format("json");
+        eventData.version("restv2.1").includeData(List.of("recipients", "tabs"));
+        ret.setEventData(eventData);
         return ret;
     }
 
     private static EnvelopeEvent buildEnvelopeEvent(ESignEventListener.PackageEventListener event) {
         EnvelopeEvent ret = new EnvelopeEvent();
-        ret.setEnvelopeEventStatusCode(event.getEventStatus().name());
+//        ret.setEnvelopeEventStatusCode(event.getEventStatus().name());
+        ret.setEnvelopeEventStatusCode("Completed");
         ret.setIncludeDocuments("" + event.isDocumentsIncluded());
         return ret;
     }

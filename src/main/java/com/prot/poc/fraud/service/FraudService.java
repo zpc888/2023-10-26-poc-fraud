@@ -24,6 +24,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Slf4j
 public class FraudService {
+    private long mimicSignCounter = 1;
     private final FraudAttestationPDFGen attestationPDFGen;
     private final DocStoreRepository docStoreRepository;
 
@@ -66,10 +67,10 @@ public class FraudService {
         byte[] signedPDF = attestationPDFGen.addWatermarkSign(doc.getContent(), signer.fullName());
         log.debug("Signed for doc id = {}", docId);
 
-        return saveSignedDocAndNotifySalesforce(doc, signedPDF);
+        return saveSignedDocAndNotifySalesforce(doc, signedPDF, (mimicSignCounter++) + "");
     }
 
-    public Mono<SignedAndCallbackResult> saveSignedDocAndNotifySalesforce(DocStore unsignedDoc, byte[] signedPDF) {
+    public Mono<SignedAndCallbackResult> saveSignedDocAndNotifySalesforce(DocStore unsignedDoc, byte[] signedPDF, String context) {
         Long docId = unsignedDoc.getId();
         DocStore signedDoc = new DocStore();
         signedDoc.setDocName("Fraud Attestation Report - Signed");
@@ -77,7 +78,7 @@ public class FraudService {
         signedDoc.setStatus(DocStatus.SIGNED);
         signedDoc.setSourceNumber(unsignedDoc.getSourceNumber());
         signedDoc.setContent(signedPDF);
-        signedDoc.setSignPackageId(unsignedDoc.getSignPackageId() + "/signed");
+        signedDoc.setSignPackageId(unsignedDoc.getSignPackageId() + "/" + context);
         docStoreRepository.save(signedDoc);
         String signedDocId = signedDoc.getId().toString();
         log.debug("Saved the signed doc with new doc-id = {}", signedDocId);

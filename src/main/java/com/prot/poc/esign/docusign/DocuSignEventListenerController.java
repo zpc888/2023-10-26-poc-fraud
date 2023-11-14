@@ -2,6 +2,7 @@ package com.prot.poc.esign.docusign;
 
 import com.prot.poc.esign.ESignService;
 import com.prot.poc.fraud.entity.DocStore;
+import com.prot.poc.fraud.model.SignedAndCallbackResult;
 import com.prot.poc.fraud.repository.DocStoreRepository;
 import com.prot.poc.fraud.service.FraudService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -45,20 +46,21 @@ public class DocuSignEventListenerController {
             Map<String, Object> data = (Map<String, Object>)eventInfo.get("data");
             String envelopeId = (String)data.get("envelopeId");
             log.debug("try to download signed document for envelopeId = {}", envelopeId);
-            downloadSignedPDF(envelopeId);
+            return downloadSignedPDF(envelopeId).map(r -> Collections.singletonMap("status", "ok"));
+        } else {
+            return Mono.just(Collections.singletonMap("status", "ok"));
         }
-        return Mono.just(Collections.singletonMap("status", "ok"));
     }
 
-    private void downloadSignedPDF(String pkgId) {
+    private Mono<SignedAndCallbackResult> downloadSignedPDF(String pkgId) {
         Optional<DocStore> byPkgId = repository.findDocBySignPackageId(pkgId);
         if (!byPkgId.isPresent()) {
             log.error("cannot find document with sign package id: {}", pkgId);
-            return;
+            return Mono.empty();
         }
         log.debug("Found the document from doc store based on sign package id = {}", pkgId);
         byte[] signedPDF = eSignService.downloadDocument(pkgId, byPkgId.get().getId().toString());
-        fraudGenAndSign.saveSignedDocAndNotifySalesforce(byPkgId.get(), signedPDF);
+        return fraudGenAndSign.saveSignedDocAndNotifySalesforce(byPkgId.get(), signedPDF, "docusign");
     }
 
     @RequestMapping("/esign-event-listener")

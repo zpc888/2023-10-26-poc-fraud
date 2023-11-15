@@ -127,10 +127,19 @@ public class FraudAttestationPDFGen {
         stream.setNonStrokingColor(Color.WHITE);
         stream.newLineAtOffset(110, (float)(4 * contentFontHeight * lineSpan));             // offset x and y
         stream.showText("_signature_");
-        stream.newLineAtOffset(0, (float)(-2 * contentFontHeight * lineSpan));                // offset x and y
+        stream.newLineAtOffset(0, (float)(-2 * contentFontHeight * lineSpan));              // offset x and y
         stream.showText("_printed_name_");
-        stream.newLineAtOffset(0, (float)(-2 * contentFontHeight * lineSpan));                // offset x and y
+        stream.newLineAtOffset(0, (float)(-2 * contentFontHeight * lineSpan));              // offset x and y
         stream.showText("_signed_date_");
+        // temporarily test duplicated anchors
+        // if 1 anchor was duplicated 3 times, it will ask to sign 3 times.
+        // if anchor was added twice, it will ask to sign 3 * 2 times, i.e. each anchor will be asked 3 times.
+        /*
+        stream.newLineAtOffset(0, (float)(-2 * contentFontHeight * lineSpan));
+        stream.showText("_signature_");
+        stream.newLineAtOffset(0, (float)(-2 * contentFontHeight * lineSpan));
+        stream.showText("_signed_date_");
+         */
 
         stream.endText();
 

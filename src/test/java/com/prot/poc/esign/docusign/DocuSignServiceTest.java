@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class DocuSignServiceTest {
     private static final String VISIBLE_ANCHOR_PDF = "test-esign-fraud-attestation.pdf";
     private static final String INVISIBLE_ANCHOR_PDF = "test-esign-with-invisible-anchor.pdf";
+    private static final String DUPLICATE_ANCHOR_PDF = "test-esign-with-dup-anchor.pdf";
     private static final String ROLE_NAME = "signer";
     
     @Autowired
@@ -38,6 +39,7 @@ class DocuSignServiceTest {
     DocuSignService service;
     SignPackage pkgWithVisibleAnchorAndXY;
     SignPackage pkgWithInvisibleAnchorOnly;
+    SignPackage pkgWithDupAnchor;
 
     static byte[] loadPDF(String resourcePDF) {
         try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourcePDF)) {
@@ -64,6 +66,10 @@ class DocuSignServiceTest {
                 buildInvisibleAnchorTouch(ROLE_NAME),
                 INVISIBLE_ANCHOR_PDF,
                 "test fraud invisible anchors to '_signature_' and '_signed_date_'");
+        pkgWithDupAnchor = buildPackage(
+                buildInvisibleAnchorTouch(ROLE_NAME),
+                DUPLICATE_ANCHOR_PDF,
+                "test dup invisible anchors to '_signature_' and '_signed_date_'");
     }
 
     private SignPackage buildPackage(List<TouchType> touches, String pdfResource, String subjectPrefix) {
@@ -137,6 +143,13 @@ class DocuSignServiceTest {
     @Test
     void sendInvisibleAnchorForSign() {
         sendPkgForSign(pkgWithInvisibleAnchorOnly);
+    }
+
+    @Test
+    void sendDuplicateAnchorForSign() {
+        // if 1 anchor was duplicated 3 times, it will ask to sign 3 times.
+        // if anchor was added twice, it will ask to sign 3 * 2 times, i.e. each anchor will be asked 3 times.
+        sendPkgForSign(pkgWithDupAnchor);
     }
 
     @Test

@@ -1,0 +1,35 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+title nCino 2023 Fall - Fees Summary ERD
+
+'skinparam classBorderThickness 0
+
+hide circle
+hide empty methods
+hide empty fields
+
+
+entity TemplateRecords as "<b>Template Records</b> \nLLC_BI__Template_Records__c"
+entity Relationship as "<b>Relationship</b> \nAccount"
+entity ServiceMgmtDetail as "<b>Service Mgmt Detail</b> \nLLC_BI__Service_Mgmt_Detail__c"
+entity ServiceMgmt as "<b>Service Mgmt</b> \nLLC_BI__Service_Mgmt__c"
+entity Fee as "<b>Fee</b> \nLLC_BI__Fee__c"
+entity FeeLoanAggregate as "<b>Fee Loan Aggregate</b> \nLLC_BI__Fee_Loan_Aggregate__c"
+entity Loan as "<b>Loan</b> \nLLC_BI__Loan__c"
+
+Loan |o--o{ Loan
+Loan |o--o{ ServiceMgmt
+Loan }o--o| Relationship
+Loan }o--o| FeeLoanAggregate
+Loan ||--o{ Fee
+ServiceMgmt }o--o| Relationship
+ServiceMgmt |o--o{ ServiceMgmt
+ServiceMgmt ||--o{ ServiceMgmtDetail
+ServiceMgmtDetail |o--o{ Fee
+Relationship |o--o{ Fee
+Fee }o--o| FeeLoanAggregate
+Fee |o--o{ Fee
+Fee }o--o| TemplateRecords
+
+@enduml

@@ -1,0 +1,49 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+title nCino 2023 Fall - Collateral Summary ERD
+
+'skinparam classBorderThickness 0
+
+hide circle
+hide empty methods
+hide empty fields
+
+
+entity Relationship as "<b>Relationship</b> \nAccount"
+entity CollateralPledged as "<b>Collateral Pledged</b> \nLLC_BI__Loan_Collateral2__c"
+entity PolicyException as "<b>Policy Exception</b> \nLLC_BI__Policy_Exception__c"
+entity CollateralMgmt as "<b>Collateral Mgmt</b> \nLLC_BI__c"
+entity CollateralGroup as "<b>Collateral Group</b> \nLLC_BI__c"
+entity CollateralOwnership as "<b>Collateral Ownership</b> \nLLC_BI__Account_Collateral__c"
+entity Collateral as "<b>Collateral</b> \nLLC_BI__Loan_Collateral__c"
+entity LoanCollateralAggregate as "<b>Loan Collateral Aggregate</b> \nLLC_BI__Loan_Collateral_Aggregate__c"
+entity CollateralValuation as "<b>Collateral Valuation</b> \nLLC_BI__c"
+entity CollateralType as "<b>Collateral Type</b> \nLLC_BI__c"
+entity ProductCollateralType as "<b>Product Collateral Type</b> \nLLC_BI__Product_Collateral_Type__c"
+entity Loan as "<b>Loan</b> \nLLC_BI__Loan__c"
+entity Lien as "<b>Lien</b> \nLLC_BI__Lien__c"
+
+CollateralValuation }o--|| CollateralMgmt
+CollateralMgmt |o--o{ PolicyException
+CollateralMgmt |o--o{ CollateralMgmt
+CollateralMgmt ||--o{ CollateralOwnership
+CollateralMgmt }o--o| Collateral
+CollateralMgmt ||--o{ CollateralGroup
+CollateralMgmt ||--o{ Lien
+CollateralMgmt ||--o{ CollateralPledged
+CollateralMgmt }o--|| CollateralType
+CollateralType |o--o{ CollateralType
+CollateralType ||--o{ ProductCollateralType
+Collateral |o--o{ CollateralOwnership
+CollateralOwnership }o--|| Relationship
+Relationship |o--o{ PolicyException
+Relationship |o--o{ Loan
+PolicyException }o--o| Loan
+Loan |o--o{ Loan
+Loan |o--o{ Lien
+Loan ||--o{ CollateralPledged
+Loan }o--o| LoanCollateralAggregate
+LoanCollateralAggregate ||--o{ CollateralPledged
+
+@enduml

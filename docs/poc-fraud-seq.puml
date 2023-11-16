@@ -1,0 +1,91 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+title Fraud POC Application
+autonumber
+
+actor "Frontline\nTeam" as front
+actor "Fraud\nTeam" as fraud
+actor "Security\nTeam" as sec
+box Salesforce #lightblue
+participant "Lightning\nWeb Component" as lwc
+control "Apex\nController" as apexController
+participant "Apex\nRest Client" as apexClient
+control "Apex\n Rest Service" as apexService
+entity "Fraud\nCustom Objects" as sObject
+end box
+box "AWS java app" #lightgreen
+control "Java\nController" as javaController
+participant "Java\nService" as javaService
+participant "DocuSign\nJava SDK" as docusignSDK
+database "Document\nStore" as h2
+end box
+participant "Docusign\nProvider" as docusignProvider
+actor "Client" as client
+
+==Find Frauds==
+fraud --> lwc: Create/Update Fraud
+lwc --> apexController
+apexController --> sObject: Save/Update Fraud
+fraud --> lwc: Submit
+note right: This Fraud is visible to Fraud Team to process now, readonly for Frontline afterwards
+lwc --> apexController: Save Status
+apexController --> sObject: Save
+
+|||
+== Process Frauds==
+fraud --> lwc: Send Fraud Attestation Letter
+note right
+Base on client/account contact email, if having phone, it will do multi-factor authentication at ESign phase
+end note
+
+lwc --> apexController
+apexController --> apexClient
+apexClient --> javaController: Generate Fraud Attestation, then Email to Client
+javaController --> javaService
+javaService --> javaService: Generate PDF
+javaService --> h2: Save
+javaService --> docusignSDK: Sign Request
+docusignSDK --> docusignProvider: Send out Envelope
+{send} docusignProvider --> client: Email for sign
+docusignSDK <-- docusignProvider: Envelope Id
+javaService <-- docusignSDK: Envelope Id
+javaService --> h2: Associate Envelope Id with Doc
+javaController <-- javaService
+apexClient <-- javaController: Fraud Attestation Doc Id
+apexController <-- apexClient: Doc Id
+apexController --> s0bject: Associate Doc Id
+
+note over fraud, client #pink
+Some Time Later
+end note
+{sign} client --> docusignProvider: Click Email to sign
+docusignProvider --> javaController: Notify envelope-completed (all documents/all
+javaController --> javaService: Completed Event
+javaService --> docusignSDK: Download
+docusignSDK --> docusignProvider: Download All Signed Documents
+docusignSDK <-- docusignProvider: Signed PDF content
+javaService <-- docusignSDK: PDF data
+javaService --> h2: Lookup Attestation Doc By Envelope Id
+javaService --> h2: Save Signed Documents
+javaService --> apexService: Notify Attestation Signed
+apexService --> s0bject: Update Sign Status
+fraud -> lwc: View Signed PDF
+note right
+No need to refresh screen, since it checks sign status every n-seconds if not signed
+end note
+fraud -> lwc: Verified / Closed
+note right: This Fraud is visible to Security Team to review now, readonly for Both Frontline and Fraud Team
+lwc-> apexController: save Fraud Status
+apexController --> s0bject: save
+
+|||
+==Review Frauds==
+sec --> lwc: Add security note
+lwc --> apexController: save
+apexController --> sobject: save
+sec -->lwc: Approve / Reject
+note right: This Fraud work-item is completed in lifecycle, readonly for all
+lwc --> apexController: save Approval Status
+apexController --> s0bject: save
+@enduml

@@ -1,0 +1,167 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+title nCino 2023 Fall - Deposit Summary - AutoGen : 22 Objects
+
+'skinparam classBorderThickness 0
+
+hide circle
+hide empty methods
+hide empty fields
+
+
+entity ProductLine as "<b>Product Line</b> \nLLC_BI__Product_Line__c"  {
+}
+entity ProductType as "<b>Product Type</b> \nLLC_BI__Product_Type__c"  {
+<u><b>LLC_BI__Product_Line__c: Product Line</b></u>
+}
+entity Product as "<b>Product</b> \nLLC_BI__Product__c"  {
+<u><b>LLC_BI__Product_Type__c: Product Type</b></u>
+LLC_BI__Product_Feature__c: Product Feature
+LLC_BI__Deposit_Rate_Structure__c: Deposit Rate Structure
+}
+entity ProductFeature as "<b>Product Feature</b> \nLLC_BI__Product_Feature__c"  {
+}
+entity DepositRateStructure as "<b>Deposit Rate Structure</b> \nLLC_BI__Deposit_Rate_Structure__c"  {
+}
+entity Tier as "<b>Tier</b> \nLLC_BI__Tier__c"  {
+LLC_BI__Deposit_Rate_Structure__c: Deposit Rate Structure
+LLC_BI__Tier_Deposit__c: Deposit
+LLC_BI__Tier_Template__c: Tier
+}
+entity TreasuryService as "<b>Treasury Service</b> \nLLC_BI__Treasury_Service__c"  {
+LLC_BI__Branch__c: Branch
+LLC_BI__Product_Package__c: Product Package
+LLC_BI__Product_Reference__c: Product
+LLC_BI__Relationship__c: Relationship
+}
+entity Deposit as "<b>Deposit</b> \nLLC_BI__Deposit__c"  {
+LLC_BI__Account__c: Relationship
+LLC_BI__Contact__c: Contact
+LLC_BI__Funding_Method__c: Funding Method
+LLC_BI__Originating_Branch__c: Branch
+LLC_BI__Ownership_Structure_Type__c: Ownership Structure Type
+LLC_BI__Product_Package__c: Product Package
+LLC_BI__Product_Reference__c: Product
+LLC_BI__Related_Deposit__c: Deposit
+LLC_BI__Deposit_Rate_Structure__c: Deposit Rate Structure
+LLC_BI__Account_To_Receive_Accrued_Interest__c: Deposit
+LLC_BI__Relationship_Under_Maintenance__c: Relationship
+}
+entity FundingMethodType as "<b>Funding Method Type</b> \nLLC_BI__Funding_Method_Type__c"  {
+}
+entity FundingMethod as "<b>Funding Method</b> \nLLC_BI__Funding_Method__c"  {
+LLC_BI__Funding_Method_Type__c: Funding Method Type
+}
+entity ProductPackage as "<b>Product Package</b> \nLLC_BI__Product_Package__c"  {
+LLC_BI__Account__c: Relationship
+LLC_BI__Primary_Entity__c: Relationship
+}
+entity Contact as "<b>Contact</b> \nContact" #lightblue {
+MasterRecordId: Contact
+AccountId: Relationship
+ReportsToId: Contact
+}
+entity AuthorizedUser as "<b>Authorized User</b> \nLLC_BI__Authorized_User__c"  {
+LLC_BI__Contact_Reference__c: Contact
+LLC_BI__Treasury_Service__c: Treasury Service
+}
+entity OwnershipStructureType as "<b>Ownership Structure Type</b> \nLLC_BI__Ownership_Structure_Type__c"  {
+}
+entity Beneficiary as "<b>Beneficiary</b> \nLLC_BI__Beneficiary__c"  {
+LLC_BI__Deposit__c: Deposit
+LLC_BI__Account_Owner_Related_to_Beneficiary__c: Relationship
+}
+entity AnalyzedAccount as "<b>Analyzed Account</b> \nLLC_BI__Analyzed_Account__c"  {
+LLC_BI__Deposit_Account__c: Deposit
+LLC_BI__Deposit_Reference__c: Deposit
+LLC_BI__Relationship__c: Relationship
+LLC_BI__Treasury_Service_Reference__c: Treasury Service
+LLC_BI__Treasury_Service__c: Treasury Service
+}
+entity AuthorizedSigner as "<b>Authorized Signer</b> \nLLC_BI__Contingent_Liabilty__c"  {
+<u><b>LLC_BI__Contact__c: Contact</b></u>
+<u><b>LLC_BI__Entity__c: Entity Involvement</b></u>
+LLC_BI__Ownership_Structure_Role__c: Ownership Structure Role
+LLC_BI__Authorized_Account__c: Authorized Account
+LLC_BI__Authorized_Signer__c: Authorized Signer
+}
+entity OwnershipStructureRole as "<b>Ownership Structure Role</b> \nLLC_BI__Ownership_Structure_Role__c"  {
+<u><b>LLC_BI__Ownership_Structure_Type__c: Ownership Structure Type</b></u>
+}
+entity AuthorizedAccount as "<b>Authorized Account</b> \nLLC_BI__Authorized_Account__c"  {
+<u><b>LLC_BI__Account__c: Relationship</b></u>
+<u><b>LLC_BI__Entity__c: Entity Involvement</b></u>
+LLC_BI__Authorized_Account__c: Authorized Account
+LLC_BI__Ownership_Structure_Role__c: Ownership Structure Role
+}
+entity Relationship as "<b>Relationship</b> \nAccount" #lightblue {
+MasterRecordId: Relationship
+LLC_BI__Branch__c: Branch
+}
+entity EntityInvolvement as "<b>Entity Involvement</b> \nLLC_BI__Legal_Entities__c"  {
+<u><b>LLC_BI__Account__c: Relationship</b></u>
+LLC_BI__Deposit__c: Deposit
+LLC_BI__Product_Package__c: Product Package
+LLC_BI__Treasury_Service__c: Treasury Service
+LLC_BI__Doing_Business_As__c: Relationship
+}
+entity Branch as "<b>Branch</b> \nLLC_BI__Branch__c"  {
+}
+
+Relationship }o--o| Relationship
+Relationship }o--o| Branch
+FundingMethod }o--o| FundingMethodType
+ProductPackage }o--o| Relationship
+ProductPackage }o--o| Relationship
+Deposit }o--o| Relationship
+Deposit }o--o| Contact
+Deposit }o--o| FundingMethod
+Deposit }o--o| Branch
+Deposit }o--o| OwnershipStructureType
+Deposit }o--o| ProductPackage
+Deposit }o--o| Product
+Deposit }o--o| Deposit
+Deposit }o--o| DepositRateStructure
+Deposit }o--o| Deposit
+Deposit }o--o| Relationship
+ProductType }o--|| ProductLine
+Product }o--|| ProductType
+Product }o--o| ProductFeature
+Product }o--o| DepositRateStructure
+Contact }o--o| Contact
+Contact }o--o| Relationship
+Contact }o--o| Contact
+AuthorizedAccount }o--|| Relationship
+AuthorizedAccount }o--|| EntityInvolvement
+AuthorizedAccount }o--o| AuthorizedAccount
+AuthorizedAccount }o--o| OwnershipStructureRole
+OwnershipStructureRole }o--|| OwnershipStructureType
+TreasuryService }o--o| Branch
+TreasuryService }o--o| ProductPackage
+TreasuryService }o--o| Product
+TreasuryService }o--o| Relationship
+AnalyzedAccount }o--o| Deposit
+AnalyzedAccount }o--o| Deposit
+AnalyzedAccount }o--o| Relationship
+AnalyzedAccount }o--o| TreasuryService
+AnalyzedAccount }o--o| TreasuryService
+Tier }o--o| DepositRateStructure
+Tier }o--o| Deposit
+Tier }o--o| Tier
+Beneficiary }o--o| Deposit
+Beneficiary }o--o| Relationship
+EntityInvolvement }o--|| Relationship
+EntityInvolvement }o--o| Deposit
+EntityInvolvement }o--o| ProductPackage
+EntityInvolvement }o--o| TreasuryService
+EntityInvolvement }o--o| Relationship
+AuthorizedSigner }o--|| Contact
+AuthorizedSigner }o--|| EntityInvolvement
+AuthorizedSigner }o--o| OwnershipStructureRole
+AuthorizedSigner }o--o| AuthorizedAccount
+AuthorizedSigner }o--o| AuthorizedSigner
+AuthorizedUser }o--o| Contact
+AuthorizedUser }o--o| TreasuryService
+
+@enduml

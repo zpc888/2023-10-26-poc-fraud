@@ -1,16 +1,19 @@
 package com.prot.erd.service;
 
-import com.prot.erd.model.AllDefinition;
-import com.prot.erd.model.AspectDefinition;
-import com.prot.erd.model.Relationship;
-import com.prot.erd.model.SObject;
+import com.prot.erd.model.*;
 import com.prot.poc.common.AppException;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @Author: <a href="mailto: pengcheng.zhou@gmail.com">PengCheng Zhou</a>
@@ -32,6 +35,47 @@ public class PlantUMLGen {
         this.niceTitleSuffix = suffix;
     }
 
+    public void genAspectERDAutomatically(String inRootDir, String outRootDir) {
+        AspectObjectsLoader loader = new AspectObjectsLoader();
+        List<Pair<String, String>> pairs = loader.loadAspectObjects(inRootDir, "aspect-objects.txt");
+        Map<String, List<String>> aspectObjects = pairs.stream().collect(Collectors.groupingBy(Pair::getKey,
+                mapping(Pair::getValue, toList())));
+        for (String aspect: aspectObjects.keySet()) {
+            List<String> objectApis = aspectObjects.get(aspect);
+            try {
+                genOneApsectERD(aspect, objectApis, inRootDir, outRootDir);
+            } catch (AppException ae) {
+                throw ae;
+            } catch (Exception ex) {
+                throw new AppException("Fail to generate aspect: " + aspect + " ERDs", ex);
+            }
+        }
+    }
+
+    private void genOneApsectERD(String aspect, List<String> objectApis, String inRoot, String outRoot) throws Exception {
+        String noSpace = aspect.replaceAll(" ", "-");
+        String fieldFilename = noSpace + ".html";
+        File f = new File(inRoot, fieldFilename);
+        if (!f.isFile()) {
+            throw new AppException("Field file: " + f.getAbsolutePath() + " is not a file");
+        }
+        if (!f.exists()) {
+            throw new AppException("Field file: " + f.getAbsolutePath() + " does not exist");
+        }
+        String outFile = addPrefixAndSuffix(outFilePrefix, noSpace, outFileSuffix) + ".puml";
+        File out = new File(outRoot, outFile);
+        try (InputStream is = new FileInputStream(f);
+             OutputStream os = new FileOutputStream(out);
+             OutputStreamWriter osw = new OutputStreamWriter(os, StandardCharsets.UTF_8);
+             PrintWriter pw = new PrintWriter(osw)) {
+            Map<String, List<SObjectField>> verifiedMap = new SOQLResultParserHtmlImpl()
+                    .parse(aspect, objectApis, is);
+            String title = addPrefixAndSuffix(niceTitlePrefix, aspect, niceTitleSuffix);
+            new SOQLResultToERDGen().gen(pw, title + " : " + objectApis.size() + " Objects",
+                    objectApis, verifiedMap);
+        }
+    }
+
     public void genUML(String erdDefRootDir, String outRootDir) {
         genUML(new File(erdDefRootDir), new File(outRootDir));
     }
@@ -48,12 +92,7 @@ public class PlantUMLGen {
         try {
             String outFileName = aspect.getNormalizedName();
             final String title = niceTitle(outFileName, niceTitlePrefix, niceTitleSuffix);
-            if (StringUtils.isNotBlank(outFilePrefix)) {
-                outFileName = outFilePrefix + outFileName;
-            }
-            if (StringUtils.isNotBlank(outFileSuffix)) {
-                outFileName = outFileName + outFileSuffix;
-            }
+            outFileName = addPrefixAndSuffix(outFilePrefix, outFileName, outFileSuffix);
             outFileName = outFileName + ".puml";
             File f = new File(outRootDir, outFileName);
             try (OutputStream os = new FileOutputStream(f);
@@ -85,16 +124,21 @@ public class PlantUMLGen {
 
     }
 
+    private String addPrefixAndSuffix(String prefix, String value, String suffix) {
+        if (StringUtils.isNotBlank(prefix)) {
+            value = prefix + value;
+        }
+        if (StringUtils.isNotBlank(suffix)) {
+            value = value + suffix;
+        }
+        return value;
+    }
+
     private String niceTitle(String outFileName, String titlePrefix, String titleSuffix) {
         String ret = Arrays.stream(outFileName.split("-"))
                 .map(StringUtils::capitalize)
                 .collect(Collectors.joining(" "));
-        if (StringUtils.isNotBlank(titlePrefix)) {
-            ret = titlePrefix + ret;
-        }
-        if (StringUtils.isNotBlank(titleSuffix)) {
-            ret = ret + titleSuffix;
-        }
+        ret = addPrefixAndSuffix(titlePrefix, ret, titleSuffix);
         return ret;
     }
 

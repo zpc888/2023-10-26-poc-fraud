@@ -1,0 +1,93 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+title nCino 2023 Fall - Risk Rating Summary - AutoGen : 12 Objects
+
+'skinparam classBorderThickness 0
+
+hide circle
+hide empty methods
+hide empty fields
+
+
+entity Product as "<b>Product</b> \nLLC_BI__Product__c"  {
+}
+entity ProductProgram as "<b>Product Program</b> \nLLC_BI__Product_Program__c"  {
+<u><b>LLC_BI__Product__c: Product</b></u>
+LLC_BI__Feature_Template__c: Risk Grade Template
+LLC_BI__Parent_Program__c: Product Program
+LLC_BI__Qualification_Template__c: Risk Grade Template
+}
+entity ProductProgramHistoryDetail as "<b>Product Program History Detail</b> \nLLC_BI__Product_Program_History_Detail__c"  {
+<u><b>LLC_BI__Product_Program_History__c: Product Program History</b></u>
+LLC_BI__Product_Program__c: Product Program
+}
+entity ProductProgramHistory as "<b>Product Program History</b> \nLLC_BI__Product_Program_History__c"  {
+<u><b>LLC_BI__Loan__c: Loan</b></u>
+}
+entity RiskGradingCriteria as "<b>Risk Grading Criteria</b> \nLLC_BI__Risk_Grade_Criteria__c"  {
+<u><b>LLC_BI__Risk_Grade_Factor__c: Risk Grade Factor</b></u>
+}
+entity RiskGradeFactor as "<b>Risk Grade Factor</b> \nLLC_BI__Risk_Grade_Factor__c"  {
+LLC_BI__Risk_Grade_Group__c: Risk Grade Group
+LLC_BI__Risk_Grade_Template__c: Risk Grade Template
+}
+entity RiskGradeFactorValue as "<b>Risk Grade Factor Value</b> \nLLC_BI__Risk_Grade_Factor_Value__c"  {
+<u><b>LLC_BI__Risk_Grade_Factor__c: Risk Grade Factor</b></u>
+LLC_BI__Annual_Review__c: Risk Rating Review
+LLC_BI__Risk_Grade_Template__c: Risk Grade Template
+}
+entity RiskGradeGroup as "<b>Risk Grade Group</b> \nLLC_BI__Risk_Grade_Group__c"  {
+<u><b>LLC_BI__Risk_Grade_Template__c: Risk Grade Template</b></u>
+}
+entity Loan as "<b>Loan</b> \nLLC_BI__Loan__c"  {
+LLC_BI__Account__c: Relationship
+LLC_BI__Highest__c: Loan
+LLC_BI__ParentLoan__c: Loan
+LLC_BI__Product_Reference__c: Product
+LLC_BI__OriginalParentLoan__c: Loan
+LLC_BI__Risk_Grade_Template__c: Risk Grade Template
+Legal_Firm_Customer__c: Relationship
+}
+entity RiskRatingReview as "<b>Risk Rating Review</b> \nLLC_BI__Annual_Review__c"  {
+<u><b>LLC_BI__Account__c: Relationship</b></u>
+LLC_BI__Loan__c: Loan
+LLC_BI__Risk_Grade_Template__c: Risk Grade Template
+}
+entity Relationship as "<b>Relationship</b> \nAccount" #lightblue {
+MasterRecordId: Relationship
+LLC_BI__Risk_Grade_Template__c: Risk Grade Template
+}
+entity RiskGradeTemplate as "<b>Risk Grade Template</b> \nLLC_BI__Risk_Grade_Template__c"  {
+LLC_BI__Risk_Rating_Review__c: Risk Rating Review
+}
+
+RiskGradingCriteria }o--|| RiskGradeFactor
+Relationship }o--o| Relationship
+Relationship }o--o| RiskGradeTemplate
+RiskGradeFactorValue }o--|| RiskGradeFactor
+RiskGradeFactorValue }o--o| RiskRatingReview
+RiskGradeFactorValue }o--o| RiskGradeTemplate
+RiskRatingReview }o--|| Relationship
+RiskRatingReview }o--o| Loan
+RiskRatingReview }o--o| RiskGradeTemplate
+RiskGradeTemplate }o--o| RiskRatingReview
+ProductProgram }o--|| Product
+ProductProgram }o--o| RiskGradeTemplate
+ProductProgram }o--o| ProductProgram
+ProductProgram }o--o| RiskGradeTemplate
+ProductProgramHistoryDetail }o--|| ProductProgramHistory
+ProductProgramHistoryDetail }o--o| ProductProgram
+RiskGradeGroup }o--|| RiskGradeTemplate
+RiskGradeFactor }o--o| RiskGradeGroup
+RiskGradeFactor }o--o| RiskGradeTemplate
+ProductProgramHistory }o--|| Loan
+Loan }o--o| Relationship
+Loan }o--o| Loan
+Loan }o--o| Loan
+Loan }o--o| Product
+Loan }o--o| Loan
+Loan }o--o| RiskGradeTemplate
+Loan }o--o| Relationship
+
+@enduml

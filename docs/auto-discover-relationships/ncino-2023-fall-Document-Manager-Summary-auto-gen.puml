@@ -1,0 +1,237 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+title nCino 2023 Fall - Document Manager Summary - AutoGen : 28 Objects
+
+'skinparam classBorderThickness 0
+
+hide circle
+hide empty methods
+hide empty fields
+
+
+entity ProductCCL as "<b>ProductCCL</b> \nLLC_BI__ProductCCL__c"  {
+<u><b>LLC_BI__Closing_Checklist__c: Closing Checklist</b></u>
+<u><b>LLC_BI__Product__c: Product</b></u>
+}
+entity Product as "<b>Product</b> \nLLC_BI__Product__c"  {
+}
+entity ProductDocTab as "<b>ProductDocTab</b> \nLLC_BI__ProductDocTab__c"  {
+<u><b>LLC_BI__DocTab__c: DocTab</b></u>
+<u><b>LLC_BI__Product__c: Product</b></u>
+}
+entity DocTab as "<b>DocTab</b> \nLLC_BI__DocTab__c"  {
+LLC_BI__docManager__c: DocManager
+}
+entity Deposit as "<b>Deposit</b> \nLLC_BI__Deposit__c"  {
+LLC_BI__Account__c: Relationship
+LLC_BI__Product_Reference__c: Product
+LLC_BI__Related_Deposit__c: Deposit
+LLC_BI__Financial_Institution_Authorized_Signer__c: User
+LLC_BI__Account_To_Receive_Accrued_Interest__c: Deposit
+LLC_BI__Relationship_Under_Maintenance__c: Relationship
+}
+entity DocumentPlaceholder as "<b>Document Placeholder</b> \nLLC_BI__Document_Placeholder__c"  {
+LLC_BI__Approved_By__c: User
+LLC_BI__Closing_Checklist__c: Closing Checklist
+LLC_BI__DocClass__c: DocClass
+LLC_BI__DocManager__c: DocManager
+LLC_BI__DocTab__c: DocTab
+LLC_BI__DocType__c: DocType
+LLC_BI__Document_Store_Index__c: Document Store Index
+LLC_BI__Portal_Uploaded_By__c: User
+LLC_BI__Reviewed_By__c: User
+NDOC__Account__c: Relationship
+NDOC__Deposit__c: Deposit
+}
+entity AccountDocComment as "<b>AccountDocComment</b> \nLLC_BI__AccountDocComment__c"  {
+<u><b>LLC_BI__AccountDocument__c: AccountDocument</b></u>
+}
+entity AccountDocument as "<b>AccountDocument</b> \nLLC_BI__AccountDocument__c"  {
+<u><b>LLC_BI__Account__c: Relationship</b></u>
+LLC_BI__Document_Store_Index__c: Document Store Index
+LLC_BI__Portal_Uploaded_By__c: User
+LLC_BI__approvedBy__c: User
+LLC_BI__docManager__c: DocManager
+LLC_BI__docTab__c: DocTab
+LLC_BI__docType__c: DocType
+LLC_BI__reviewedBy__c: User
+NDOC__Closing_Checklist__c: Closing Checklist
+LLC_BI__Parent__c: AccountDocument
+}
+entity Relationship as "<b>Relationship</b> \nAccount" #lightblue {
+MasterRecordId: Relationship
+<b>OwnerId: User</b>
+}
+entity DocumentStoreIndex as "<b>Document Store Index</b> \nLLC_BI__Document_Store_Index__c"  {
+<b>LLC_BI__Document_Store__c: Document Store</b>
+}
+entity DocManager as "<b>DocManager</b> \nLLC_BI__DocManager__c"  {
+}
+entity DocType as "<b>DocType</b> \nLLC_BI__DocType__c"  {
+LLC_BI__docManager__c: DocManager
+LLC_BI__docTab__c: DocTab
+}
+entity Note as "<b>Note</b> \nNote" #lightblue {
+<b>OwnerId: User</b>
+}
+entity User as "<b>User</b> \nUser" #lightblue {
+AccountId: Relationship
+}
+entity DocumentStore as "<b>Document Store</b> \nLLC_BI__Document_Store__c"  {
+}
+entity DocumentVersion as "<b>Document Version</b> \nLLC_BI__Document_Version__c"  {
+<b>LLC_BI__Document_Store__c: Document Store</b>
+}
+entity LoanDocumentName as "<b>Loan Document Name</b> \nLLC_BI__LLC_LoanDocument__c"  {
+<u><b>LLC_BI__Loan__c: Loan</b></u>
+LLC_BI__Document_Store_Index__c: Document Store Index
+LLC_BI__Portal_Uploaded_By__c: User
+LLC_BI__approvedBy__c: User
+LLC_BI__closingChecklist__c: Closing Checklist
+LLC_BI__docClass__c: DocClass
+LLC_BI__docManager__c: DocManager
+LLC_BI__docTab__c: DocTab
+LLC_BI__docType__c: DocType
+LLC_BI__parent__c: Loan Document Name
+LLC_BI__reviewedBy__c: User
+}
+entity DocClass as "<b>DocClass</b> \nLLC_BI__DocClass__c"  {
+<u><b>LLC_BI__DocType__c: DocType</b></u>
+LLC_BI__docManager__c: DocManager
+}
+entity ClosingChecklist as "<b>Closing Checklist</b> \nLLC_BI__ClosingChecklist__c"  {
+LLC_BI__docClass__c: DocClass
+LLC_BI__docManager__c: DocManager
+LLC_BI__docTab__c: DocTab
+LLC_BI__docType__c: DocType
+}
+entity CollateralTypeCCL as "<b>Collateral Type CCL</b> \nLLC_BI__Collateral_Type_CCL__c"  {
+<u><b>LLC_BI__Collateral_Type__c: Collateral Type</b></u>
+<u><b>LLC_BI__Closing_Checklist__c: Closing Checklist</b></u>
+}
+entity LLC_LoanDocComment as "<b>LLC_LoanDocComment</b> \nLLC_BI__LLC_LoanDocComment__c"  {
+<u><b>LLC_BI__LLC_LoanDocument__c: Loan Document Name</b></u>
+}
+entity CollateralType as "<b>Collateral Type</b> \nLLC_BI__Collateral_Type__c"  {
+LLC_BI__Highest_Type__c: Collateral Type
+LLC_BI__Parent_Type__c: Collateral Type
+}
+entity Loan as "<b>Loan</b> \nLLC_BI__Loan__c"  {
+LLC_BI__Account__c: Relationship
+LLC_BI__Highest__c: Loan
+LLC_BI__Loan_Officer__c: User
+LLC_BI__ParentLoan__c: Loan
+LLC_BI__Processor_Name__c: User
+LLC_BI__Product_Reference__c: Product
+LLC_BI__OriginalParentLoan__c: Loan
+cm_Approver_1__c: User
+cm_Approver_2__c: User
+Legal_Firm_Customer__c: Relationship
+Post_Closing_Review_Completed_By__c: User
+}
+entity ContentDocumentLink as "<b>Content Document Link</b> \nContentDocumentLink" #lightblue {
+<b>ContentDocumentId: Content Document</b>
+}
+entity ContentDocument as "<b>Content Document</b> \nContentDocument" #lightblue {
+ArchivedById: User
+<b>OwnerId: User</b>
+LatestPublishedVersionId: Content Version
+}
+entity ContentVersion as "<b>Content Version</b> \nContentVersion" #lightblue {
+<b>ContentDocumentId: Content Document</b>
+ContentModifiedById: User
+<b>OwnerId: User</b>
+}
+entity Attachment as "<b>Attachment</b> \nAttachment" #lightblue {
+}
+entity DocumentCollectionIndex as "<b>Document Collection Index</b> \nLLC_BI__Document_Collection_Index__c"  {
+LLC_BI__Document_Collection__c: Document Store
+<b>LLC_BI__Document_Store__c: Document Store</b>
+}
+
+Relationship }o--o| Relationship
+Relationship }o--|| User
+User }o--o| Relationship
+DocClass }o--|| DocType
+DocClass }o--o| DocManager
+AccountDocument }o--|| Relationship
+AccountDocument }o--o| DocumentStoreIndex
+AccountDocument }o--o| User
+AccountDocument }o--o| User
+AccountDocument }o--o| DocManager
+AccountDocument }o--o| DocTab
+AccountDocument }o--o| DocType
+AccountDocument }o--o| User
+AccountDocument }o--o| ClosingChecklist
+AccountDocument }o--o| AccountDocument
+ContentDocumentLink }o--|| ContentDocument
+CollateralType }o--o| CollateralType
+CollateralType }o--o| CollateralType
+ProductDocTab }o--|| DocTab
+ProductDocTab }o--|| Product
+ContentVersion }o--|| ContentDocument
+ContentVersion }o--o| User
+ContentVersion }o--|| User
+DocumentVersion }o--|| DocumentStore
+LLC_LoanDocComment }o--|| LoanDocumentName
+ClosingChecklist }o--o| DocClass
+ClosingChecklist }o--o| DocManager
+ClosingChecklist }o--o| DocTab
+ClosingChecklist }o--o| DocType
+Deposit }o--o| Relationship
+Deposit }o--o| Product
+Deposit }o--o| Deposit
+Deposit }o--o| User
+Deposit }o--o| Deposit
+Deposit }o--o| Relationship
+ProductCCL }o--|| ClosingChecklist
+ProductCCL }o--|| Product
+Loan }o--o| Relationship
+Loan }o--o| Loan
+Loan }o--o| User
+Loan }o--o| Loan
+Loan }o--o| User
+Loan }o--o| Product
+Loan }o--o| Loan
+Loan }o--o| User
+Loan }o--o| User
+Loan }o--o| Relationship
+Loan }o--o| User
+CollateralTypeCCL }o--|| CollateralType
+CollateralTypeCCL }o--|| ClosingChecklist
+ContentDocument }o--o| User
+ContentDocument }o--|| User
+ContentDocument }o--o| ContentVersion
+LoanDocumentName }o--|| Loan
+LoanDocumentName }o--o| DocumentStoreIndex
+LoanDocumentName }o--o| User
+LoanDocumentName }o--o| User
+LoanDocumentName }o--o| ClosingChecklist
+LoanDocumentName }o--o| DocClass
+LoanDocumentName }o--o| DocManager
+LoanDocumentName }o--o| DocTab
+LoanDocumentName }o--o| DocType
+LoanDocumentName }o--o| LoanDocumentName
+LoanDocumentName }o--o| User
+DocumentPlaceholder }o--o| User
+DocumentPlaceholder }o--o| ClosingChecklist
+DocumentPlaceholder }o--o| DocClass
+DocumentPlaceholder }o--o| DocManager
+DocumentPlaceholder }o--o| DocTab
+DocumentPlaceholder }o--o| DocType
+DocumentPlaceholder }o--o| DocumentStoreIndex
+DocumentPlaceholder }o--o| User
+DocumentPlaceholder }o--o| User
+DocumentPlaceholder }o--o| Relationship
+DocumentPlaceholder }o--o| Deposit
+Note }o--|| User
+DocTab }o--o| DocManager
+DocumentCollectionIndex }o--o| DocumentStore
+DocumentCollectionIndex }o--|| DocumentStore
+DocType }o--o| DocManager
+DocType }o--o| DocTab
+AccountDocComment }o--|| AccountDocument
+DocumentStoreIndex }o--|| DocumentStore
+
+@enduml

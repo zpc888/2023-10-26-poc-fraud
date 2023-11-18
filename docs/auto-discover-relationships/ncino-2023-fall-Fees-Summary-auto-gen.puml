@@ -1,0 +1,65 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+title nCino 2023 Fall - Fees Summary - AutoGen : 7 Objects
+
+'skinparam classBorderThickness 0
+
+hide circle
+hide empty methods
+hide empty fields
+
+
+entity Loan as "<b>Loan</b> \nLLC_BI__Loan__c"  {
+LLC_BI__Account__c: Relationship
+LLC_BI__Fee_Loan_Aggregate__c: Fee Loan Aggregate
+LLC_BI__Highest__c: Loan
+LLC_BI__ParentLoan__c: Loan
+LLC_BI__OriginalParentLoan__c: Loan
+Legal_Firm_Customer__c: Relationship
+}
+entity ServiceMgmt as "<b>Service Mgmt</b> \nLLC_BI__Service_Mgmt__c"  {
+LLC_BI__Account__c: Relationship
+LLC_BI__Highest__c: Service Mgmt
+LLC_BI__Loan__c: Loan
+LLC_BI__Service_Provider__c: Relationship
+}
+entity ServiceMgmtDetail as "<b>Service Mgmt Detail</b> \nLLC_BI__Service_Mgmt_Detail__c"  {
+<u><b>LLC_BI__Service_Mgmt__c: Service Mgmt</b></u>
+}
+entity Fee as "<b>Fee</b> \nLLC_BI__Fee__c"  {
+<u><b>LLC_BI__Loan__c: Loan</b></u>
+LLC_BI__Fee_Loan_Aggregate__c: Fee Loan Aggregate
+LLC_BI__Fee_Payable_To__c: Relationship
+LLC_BI__Template_Record__c: Template Records
+LLC_BI__Third_Party_Service_Detail__c: Service Mgmt Detail
+LLC_BI__Fee__c: Fee
+}
+entity FeeLoanAggregate as "<b>Fee Loan Aggregate</b> \nLLC_BI__Fee_Loan_Aggregate__c"  {
+}
+entity Relationship as "<b>Relationship</b> \nAccount" #lightblue {
+MasterRecordId: Relationship
+}
+entity TemplateRecords as "<b>Template Records</b> \nLLC_BI__Template_Records__c"  {
+}
+
+Relationship }o--o| Relationship
+ServiceMgmt }o--o| Relationship
+ServiceMgmt }o--o| ServiceMgmt
+ServiceMgmt }o--o| Loan
+ServiceMgmt }o--o| Relationship
+ServiceMgmtDetail }o--|| ServiceMgmt
+Loan }o--o| Relationship
+Loan }o--o| FeeLoanAggregate
+Loan }o--o| Loan
+Loan }o--o| Loan
+Loan }o--o| Loan
+Loan }o--o| Relationship
+Fee }o--|| Loan
+Fee }o--o| FeeLoanAggregate
+Fee }o--o| Relationship
+Fee }o--o| TemplateRecords
+Fee }o--o| ServiceMgmtDetail
+Fee }o--o| Fee
+
+@enduml

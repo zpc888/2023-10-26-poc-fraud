@@ -1,0 +1,67 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+title nCino 2023 Fall - Smart Checklist Summary - AutoGen : 8 Objects
+
+'skinparam classBorderThickness 0
+
+hide circle
+hide empty methods
+hide empty fields
+
+
+entity CollateralPledged as "<b>Collateral Pledged</b> \nLLC_BI__Loan_Collateral2__c"  {
+<b>LLC_BI__Loan__c: Loan</b>
+}
+entity TreasuryService as "<b>Treasury Service</b> \nLLC_BI__Treasury_Service__c"  {
+LLC_BI__Product_Package__c: Product Package
+LLC_BI__Relationship__c: Relationship
+}
+entity Relationship as "<b>Relationship</b> \nAccount" #lightblue {
+MasterRecordId: Relationship
+}
+entity ProductPackage as "<b>Product Package</b> \nLLC_BI__Product_Package__c"  {
+LLC_BI__Account__c: Relationship
+LLC_BI__Primary_Entity__c: Relationship
+}
+entity Checklist as "<b>Checklist</b> \nLLC_BI__Checklist__c"  {
+LLC_BI__Product_Package__c: Product Package
+LLC_BI__Treasury_Service__c: Treasury Service
+LLC_BI__Account__c: Relationship
+LLC_BI__Loan_Collateral2__c: Collateral Pledged
+LLC_BI__Loan__c: Loan
+}
+entity Loan as "<b>Loan</b> \nLLC_BI__Loan__c"  {
+LLC_BI__Account__c: Relationship
+LLC_BI__OriginalParentLoan__c: Loan
+Legal_Firm_Customer__c: Relationship
+LLC_BI__Product_Package__c: Product Package
+LLC_BI__Highest__c: Loan
+LLC_BI__ParentLoan__c: Loan
+}
+entity Requirement as "<b>Requirement</b> \nLLC_BI__Requirement__c"  {
+<b>LLC_BI__Checklist__c: Checklist</b>
+}
+entity ChecklistAutoGeneration as "<b>Checklist Auto Generation</b> \nLLC_BI__Checklist_Auto_Gen__e"  {
+}
+
+CollateralPledged }o--|| Loan
+Relationship }o--o| Relationship
+TreasuryService }o--o| ProductPackage
+TreasuryService }o--o| Relationship
+ProductPackage }o--o| Relationship
+ProductPackage }o--o| Relationship
+Loan }o--o| Relationship
+Loan }o--o| Loan
+Loan }o--o| Relationship
+Loan }o--o| ProductPackage
+Loan }o--o| Loan
+Loan }o--o| Loan
+Checklist }o--o| ProductPackage
+Checklist }o--o| TreasuryService
+Checklist }o--o| Relationship
+Checklist }o--o| CollateralPledged
+Checklist }o--o| Loan
+Requirement }o--|| Checklist
+
+@enduml

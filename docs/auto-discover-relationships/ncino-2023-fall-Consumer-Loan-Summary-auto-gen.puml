@@ -1,0 +1,109 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+title nCino 2023 Fall - Consumer Loan Summary - AutoGen : 14 Objects
+
+'skinparam classBorderThickness 0
+
+hide circle
+hide empty methods
+hide empty fields
+
+
+entity Fee as "<b>Fee</b> \nLLC_BI__Fee__c"  {
+<u><b>LLC_BI__Loan__c: Loan</b></u>
+LLC_BI__Fee_Loan_Aggregate__c: Fee Loan Aggregate
+LLC_BI__Fee_Payable_To__c: Relationship
+LLC_BI__Pricing_Option__c: Pricing Option
+LLC_BI__Legal_Entities__c: Entity Involvement
+LLC_BI__Fee__c: Fee
+}
+entity FeeLoanAggregate as "<b>Fee Loan Aggregate</b> \nLLC_BI__Fee_Loan_Aggregate__c"  {
+}
+entity PricingOption as "<b>Pricing Option</b> \nLLC_BI__Pricing_Option__c"  {
+LLC_BI__Loan__c: Loan
+LLC_BI__Product__c: Product
+LLC_BI__Fee_Aggregate__c: Fee Loan Aggregate
+LLC_BI__Account__c: Relationship
+}
+entity LoanCompliance as "<b>Loan Compliance</b> \nLLC_BI__Loan_Compliance__c"  {
+LLC_BI__Loan__c: Loan
+}
+entity EntityInvolvement as "<b>Entity Involvement</b> \nLLC_BI__Legal_Entities__c"  {
+<u><b>LLC_BI__Account__c: Relationship</b></u>
+LLC_BI__Loan__c: Loan
+LLC_BI__Doing_Business_As__c: Relationship
+}
+entity Branch as "<b>Branch</b> \nLLC_BI__Branch__c"  {
+}
+entity Relationship as "<b>Relationship</b> \nAccount" #lightblue {
+MasterRecordId: Relationship
+LLC_BI__Branch__c: Branch
+}
+entity Loan as "<b>Loan</b> \nLLC_BI__Loan__c"  {
+LLC_BI__Account__c: Relationship
+LLC_BI__Branch__c: Branch
+LLC_BI__Fee_Loan_Aggregate__c: Fee Loan Aggregate
+LLC_BI__Highest__c: Loan
+LLC_BI__ParentLoan__c: Loan
+LLC_BI__Pricing_Option__c: Pricing Option
+LLC_BI__Product_Reference__c: Product
+LLC_BI__OriginalParentLoan__c: Loan
+Main_Contact__c: Contact
+Legal_Firm_Customer__c: Relationship
+}
+entity Product as "<b>Product</b> \nLLC_BI__Product__c"  {
+<u><b>LLC_BI__Product_Type__c: Product Type</b></u>
+LLC_BI__Product_Feature__c: Product Feature
+}
+entity ProductType as "<b>Product Type</b> \nLLC_BI__Product_Type__c"  {
+<u><b>LLC_BI__Product_Line__c: Product Line</b></u>
+}
+entity ProductLine as "<b>Product Line</b> \nLLC_BI__Product_Line__c"  {
+}
+entity ProductFeature as "<b>Product Feature</b> \nLLC_BI__Product_Feature__c"  {
+}
+entity Contact as "<b>Contact</b> \nContact" #lightblue {
+MasterRecordId: Contact
+AccountId: Relationship
+ReportsToId: Contact
+}
+entity AdverseAction as "<b>Adverse Action</b> \nLLC_BI__Adverse_Action__c"  {
+<u><b>LLC_BI__Loan__c: Loan</b></u>
+}
+
+Relationship }o--o| Relationship
+Relationship }o--o| Branch
+LoanCompliance }o--o| Loan
+PricingOption }o--o| Loan
+PricingOption }o--o| Product
+PricingOption }o--o| FeeLoanAggregate
+PricingOption }o--o| Relationship
+ProductType }o--|| ProductLine
+Loan }o--o| Relationship
+Loan }o--o| Branch
+Loan }o--o| FeeLoanAggregate
+Loan }o--o| Loan
+Loan }o--o| Loan
+Loan }o--o| PricingOption
+Loan }o--o| Product
+Loan }o--o| Loan
+Loan }o--o| Contact
+Loan }o--o| Relationship
+Product }o--|| ProductType
+Product }o--o| ProductFeature
+Contact }o--o| Contact
+Contact }o--o| Relationship
+Contact }o--o| Contact
+EntityInvolvement }o--|| Relationship
+EntityInvolvement }o--o| Loan
+EntityInvolvement }o--o| Relationship
+AdverseAction }o--|| Loan
+Fee }o--|| Loan
+Fee }o--o| FeeLoanAggregate
+Fee }o--o| Relationship
+Fee }o--o| PricingOption
+Fee }o--o| EntityInvolvement
+Fee }o--o| Fee
+
+@enduml

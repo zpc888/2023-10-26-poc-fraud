@@ -1,0 +1,89 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+title nCino 2023 Fall - Product Catalog Summary - AutoGen : 13 Objects
+
+'skinparam classBorderThickness 0
+
+hide circle
+hide empty methods
+hide empty fields
+
+
+entity ReconciliationService as "<b>Reconciliation Service</b> \nLLC_BI__Reconciliation_Service__c"  {
+LLC_BI__Product_Reference__c: Product
+LLC_BI__Treasury_Service_Reference__c: Treasury Service
+}
+entity ProductStateConfig as "<b>Product State Config</b> \nLLC_BI__Product_State_Config__c"  {
+<u><b>LLC_BI__Product_Type__c: Product Type</b></u>
+}
+entity TreasuryService as "<b>Treasury Service</b> \nLLC_BI__Treasury_Service__c"  {
+LLC_BI__Product_Reference__c: Product
+LLC_BI__Reconciliation_Service__c: Reconciliation Service
+}
+entity ProductLine as "<b>Product Line</b> \nLLC_BI__Product_Line__c"  {
+}
+entity ProductType as "<b>Product Type</b> \nLLC_BI__Product_Type__c"  {
+<u><b>LLC_BI__Product_Line__c: Product Line</b></u>
+LLC_BI__Booked__c: Product State Config Pivot
+LLC_BI__Closed__c: Product State Config Pivot
+LLC_BI__Excluded__c: Product State Config Pivot
+LLC_BI__Ready_To_Transmit__c: Product State Config Pivot
+}
+entity Product as "<b>Product</b> \nLLC_BI__Product__c"  {
+<u><b>LLC_BI__Product_Type__c: Product Type</b></u>
+LLC_BI__Product_Feature__c: Product Feature
+}
+entity ProductStateConfigPivot as "<b>Product State Config Pivot</b> \nLLC_BI__Product_State_Config_Pivot__c"  {
+}
+entity BillPoint as "<b>Bill Point</b> \nLLC_BI__Bill_Point__c"  {
+LLC_BI__Product_Type__c: Product Type
+LLC_BI__Product__c: Product
+}
+entity ProductFundingMethodType as "<b>Product Funding Method Type</b> \nLLC_BI__Product_Funding_Method_Type__c"  {
+<u><b>LLC_BI__Product__c: Product</b></u>
+}
+entity ProductFeature as "<b>Product Feature</b> \nLLC_BI__Product_Feature__c"  {
+}
+entity ProductConnection as "<b>Product Connection</b> \nLLC_BI__Product_Connection__c"  {
+LLC_BI__Child_Product_Reference__c: Product
+LLC_BI__Parent_Product_Reference__c: Product
+}
+entity Loan as "<b>Loan</b> \nLLC_BI__Loan__c"  {
+LLC_BI__Highest__c: Loan
+LLC_BI__ParentLoan__c: Loan
+LLC_BI__Product_Reference__c: Product
+LLC_BI__OriginalParentLoan__c: Loan
+}
+entity Deposit as "<b>Deposit</b> \nLLC_BI__Deposit__c"  {
+LLC_BI__Product_Reference__c: Product
+LLC_BI__Related_Deposit__c: Deposit
+LLC_BI__Account_To_Receive_Accrued_Interest__c: Deposit
+}
+
+ReconciliationService }o--o| Product
+ReconciliationService }o--o| TreasuryService
+Deposit }o--o| Product
+Deposit }o--o| Deposit
+Deposit }o--o| Deposit
+ProductType }o--|| ProductLine
+ProductType }o--o| ProductStateConfigPivot
+ProductType }o--o| ProductStateConfigPivot
+ProductType }o--o| ProductStateConfigPivot
+ProductType }o--o| ProductStateConfigPivot
+ProductConnection }o--o| Product
+ProductConnection }o--o| Product
+Loan }o--o| Loan
+Loan }o--o| Loan
+Loan }o--o| Product
+Loan }o--o| Loan
+Product }o--|| ProductType
+Product }o--o| ProductFeature
+TreasuryService }o--o| Product
+TreasuryService }o--o| ReconciliationService
+ProductStateConfig }o--|| ProductType
+BillPoint }o--o| ProductType
+BillPoint }o--o| Product
+ProductFundingMethodType }o--|| Product
+
+@enduml

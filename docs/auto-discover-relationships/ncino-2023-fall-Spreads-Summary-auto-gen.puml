@@ -1,0 +1,199 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+title nCino 2023 Fall - Spreads Summary - AutoGen : 23 Objects
+
+'skinparam classBorderThickness 0
+
+hide circle
+hide empty methods
+hide empty fields
+
+
+entity SpreadStatementRecord as "<b>Spread Statement Record</b> \nLLC_BI__Spread_Statement_Record__c"  {
+<u><b>LLC_BI__Spread_Statement_Type__c: Spread Statement Template</b></u>
+LLC_BI__Linked_Spread_Statement_Record__c: Spread Statement Record
+LLC_BI__Linked_Spread_Statement_Total_Group__c: Spread Statement Total Group
+LLC_BI__Spread_Statement_Record_Total__c: Spread Statement Total Group
+LLC_BI__Source_Row__c: Spread Statement Record
+LLC_BI__Cloned_Source_Row__c: Spread Statement Record
+LLC_BI__Associated_Parent_Record__c: Spread Statement Record
+}
+entity D_SpreadStatementRecordGroup as "<b>-D Spread Statement Record Group</b> \nLLC_BI__Spread_Statement_Record_Group__c"  {
+<u><b>LLC_BI__Spread_Statement_Record__c: Spread Statement Record</b></u>
+}
+entity SpreadRecordClassification as "<b>Spread Record Classification</b> \nLLC_BI__Spread_Record_Classification__c"  {
+<u><b>LLC_BI__Spread_Statement_Record__c: Spread Statement Record</b></u>
+}
+entity PeriodConsolidation as "<b>Period Consolidation</b> \nLLC_BI__Period_Consolidation__c"  {
+<b>LLC_BI__Destination_Period__c: Spread Statement Period</b>
+<b>LLC_BI__Source_Period__c: Spread Statement Period</b>
+LLC_BI__Supplemental_Period__c: Spread Statement Period
+}
+entity SpreadStatementRecordValue as "<b>Spread Statement Record Value</b> \nLLC_BI__Spread_Statement_Record_Value__c"  {
+<u><b>LLC_BI__Spread_Statement_Record__c: Spread Statement Record</b></u>
+<u><b>LLC_BI__Spread_Statement_Period__c: Spread Statement Period</b></u>
+}
+entity SpreadStatementPeriod as "<b>Spread Statement Period</b> \nLLC_BI__Spread_Statement_Period__c"  {
+<u><b>LLC_BI__Spread_Statement_Type__c: Spread Statement Template</b></u>
+LLC_BI__Analyst__c: User
+LLC_BI__Fiscal_Year_TTM_Period__c: Spread Statement Period
+LLC_BI__Initial_Interim_TTM_Period__c: Spread Statement Period
+LLC_BI__Trailing_Interim_TTM_Period__c: Spread Statement Period
+LLC_BI__Project_from_Period__c: Spread Statement Period
+}
+entity SpreadStatementView as "<b>Spread Statement View</b> \nLLC_BI__Spread_Statement_View__c"  {
+<u><b>LLC_BI__Spread_Statement_Type__c: Spread Statement Template</b></u>
+}
+entity SpreadStatementTemplate as "<b>Spread Statement Template</b> \nLLC_BI__Spread_Statement_Type__c"  {
+LLC_BI__Bundle__c: Underwriting Bundle
+LLC_BI__Calc_Common_Sizing_Record__c: Spread Statement Record
+LLC_BI__Calc_Common_Sizing_Total_Group__c: Spread Statement Total Group
+LLC_BI__Spread_Statement_Total_Group__c: Spread Statement Total Group
+LLC_BI__Source_Statement__c: Spread Statement Template
+}
+entity TenantInformation as "<b>Tenant Information</b> \nLLC_BI__Tenant_Information__c"  {
+LLC_BI__Parent_Tenant_Information__c: Tenant Information
+LLC_BI__Spread_Statement_Period__c: Spread Statement Period
+LLC_BI__Spread_Statement_Template__c: Spread Statement Template
+LLC_BI__Relationship__c: Relationship
+}
+entity User as "<b>User</b> \nUser" #lightblue {
+AccountId: Relationship
+}
+entity CovenantCompliance as "<b>Covenant Compliance</b> \nLLC_BI__Covenant_Compliance2__c"  {
+<u><b>LLC_BI__Covenant__c: Covenant Mgmt</b></u>
+LLC_BI__Approved_By__c: User
+LLC_BI__Associated_Spread_Statement_Period__c: Spread Statement Period
+LLC_BI__Evaluated_By__c: User
+}
+entity Relationship as "<b>Relationship</b> \nAccount" #lightblue {
+MasterRecordId: Relationship
+<b>OwnerId: User</b>
+}
+entity UnderwritingBundle as "<b>Underwriting Bundle</b> \nLLC_BI__Underwriting_Bundle__c"  {
+LLC_BI__Relationship__c: Relationship
+LLC_BI__Source_Template__c: Underwriting Bundle
+LLC_BI__Financial_Consolidation__c: Financial Consolidation
+LLC_BI__Migration_Target__c: Underwriting Bundle
+}
+entity Loan as "<b>Loan</b> \nLLC_BI__Loan__c"  {
+LLC_BI__Account__c: Relationship
+LLC_BI__Highest__c: Loan
+LLC_BI__Loan_Officer__c: User
+LLC_BI__ParentLoan__c: Loan
+LLC_BI__Processor_Name__c: User
+LLC_BI__Underwriting_Summary__c: Underwriting Summary
+LLC_BI__OriginalParentLoan__c: Loan
+cm_Approver_1__c: User
+cm_Approver_2__c: User
+Legal_Firm_Customer__c: Relationship
+Post_Closing_Review_Completed_By__c: User
+}
+entity UnderwritingSummary as "<b>Underwriting Summary</b> \nLLC_BI__Underwriting_Summary__c"  {
+}
+entity Spread as "<b>Spread</b> \nLLC_BI__Spread__c"  {
+<u><b>LLC_BI__Spread_Statement_Template__c: Spread Statement Template</b></u>
+LLC_BI__Entity_Involvement__c: Entity Involvement
+LLC_BI__Loan__c: Loan
+<b>LLC_BI__Underwriting_Summary__c: Underwriting Summary</b>
+}
+entity EntityInvolvement as "<b>Entity Involvement</b> \nLLC_BI__Legal_Entities__c"  {
+<u><b>LLC_BI__Account__c: Relationship</b></u>
+LLC_BI__Loan__c: Loan
+LLC_BI__Doing_Business_As__c: Relationship
+}
+entity CovenantMgmt as "<b>Covenant Mgmt</b> \nLLC_BI__Covenant2__c"  {
+LLC_BI__Linked_Spread_Statement_Record_Total__c: Spread Statement Total Group
+LLC_BI__Linked_Spread_Statement_Record__c: Spread Statement Record
+LLC_BI__Related_Covenant__c: Covenant Mgmt
+LLC_BI__Account__c: Relationship
+}
+entity FinancialConsolidation as "<b>Financial Consolidation</b> \nLLC_BI__Financial_Consolidation__c"  {
+}
+entity SpreadRecordTotalClassification as "<b>Spread Record Total Classification</b> \nLLC_BI__Spread_Record_Total_Classification__c"  {
+<u><b>LLC_BI__Spread_Statement_Total_Group__c: Spread Statement Total Group</b></u>
+}
+entity SpreadStatementTotalGroup as "<b>Spread Statement Total Group</b> \nLLC_BI__Spread_Statement_Record_Total__c"  {
+<u><b>LLC_BI__Spread_Statement_Type__c: Spread Statement Template</b></u>
+LLC_BI__Source_Group__c: Spread Statement Total Group
+}
+entity D_SpreadStatementGroupTotal as "<b>-D Spread Statement Group Total</b> \nLLC_BI__Spread_Statement_Group_Total__c"  {
+<u><b>LLC_BI__Spread_Statement_Record_Total__c: Spread Statement Total Group</b></u>
+}
+entity SpreadStatementPeriodTotal as "<b>Spread Statement Period Total</b> \nLLC_BI__Spread_Statement_Period_Total__c"  {
+<u><b>LLC_BI__Spread_Statement_Period__c: Spread Statement Period</b></u>
+<u><b>LLC_BI__Spread_Statement_Record_Total__c: Spread Statement Total Group</b></u>
+}
+
+Relationship }o--o| Relationship
+Relationship }o--|| User
+User }o--o| Relationship
+PeriodConsolidation }o--|| SpreadStatementPeriod
+PeriodConsolidation }o--|| SpreadStatementPeriod
+PeriodConsolidation }o--o| SpreadStatementPeriod
+SpreadStatementTemplate }o--o| UnderwritingBundle
+SpreadStatementTemplate }o--o| SpreadStatementRecord
+SpreadStatementTemplate }o--o| SpreadStatementTotalGroup
+SpreadStatementTemplate }o--o| SpreadStatementTotalGroup
+SpreadStatementTemplate }o--o| SpreadStatementTemplate
+SpreadStatementView }o--|| SpreadStatementTemplate
+D_SpreadStatementGroupTotal }o--|| SpreadStatementTotalGroup
+TenantInformation }o--o| TenantInformation
+TenantInformation }o--o| SpreadStatementPeriod
+TenantInformation }o--o| SpreadStatementTemplate
+TenantInformation }o--o| Relationship
+SpreadStatementPeriodTotal }o--|| SpreadStatementPeriod
+SpreadStatementPeriodTotal }o--|| SpreadStatementTotalGroup
+CovenantMgmt }o--o| SpreadStatementTotalGroup
+CovenantMgmt }o--o| SpreadStatementRecord
+CovenantMgmt }o--o| CovenantMgmt
+CovenantMgmt }o--o| Relationship
+Loan }o--o| Relationship
+Loan }o--o| Loan
+Loan }o--o| User
+Loan }o--o| Loan
+Loan }o--o| User
+Loan }o--o| UnderwritingSummary
+Loan }o--o| Loan
+Loan }o--o| User
+Loan }o--o| User
+Loan }o--o| Relationship
+Loan }o--o| User
+SpreadStatementRecordValue }o--|| SpreadStatementRecord
+SpreadStatementRecordValue }o--|| SpreadStatementPeriod
+CovenantCompliance }o--|| CovenantMgmt
+CovenantCompliance }o--o| User
+CovenantCompliance }o--o| SpreadStatementPeriod
+CovenantCompliance }o--o| User
+Spread }o--|| SpreadStatementTemplate
+Spread }o--o| EntityInvolvement
+Spread }o--o| Loan
+Spread }o--|| UnderwritingSummary
+SpreadRecordTotalClassification }o--|| SpreadStatementTotalGroup
+EntityInvolvement }o--|| Relationship
+EntityInvolvement }o--o| Loan
+EntityInvolvement }o--o| Relationship
+SpreadRecordClassification }o--|| SpreadStatementRecord
+SpreadStatementPeriod }o--|| SpreadStatementTemplate
+SpreadStatementPeriod }o--o| User
+SpreadStatementPeriod }o--o| SpreadStatementPeriod
+SpreadStatementPeriod }o--o| SpreadStatementPeriod
+SpreadStatementPeriod }o--o| SpreadStatementPeriod
+SpreadStatementPeriod }o--o| SpreadStatementPeriod
+SpreadStatementTotalGroup }o--|| SpreadStatementTemplate
+SpreadStatementTotalGroup }o--o| SpreadStatementTotalGroup
+D_SpreadStatementRecordGroup }o--|| SpreadStatementRecord
+SpreadStatementRecord }o--|| SpreadStatementTemplate
+SpreadStatementRecord }o--o| SpreadStatementRecord
+SpreadStatementRecord }o--o| SpreadStatementTotalGroup
+SpreadStatementRecord }o--o| SpreadStatementTotalGroup
+SpreadStatementRecord }o--o| SpreadStatementRecord
+SpreadStatementRecord }o--o| SpreadStatementRecord
+SpreadStatementRecord }o--o| SpreadStatementRecord
+UnderwritingBundle }o--o| Relationship
+UnderwritingBundle }o--o| UnderwritingBundle
+UnderwritingBundle }o--o| FinancialConsolidation
+UnderwritingBundle }o--o| UnderwritingBundle
+
+@enduml

@@ -1,0 +1,89 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+title nCino 2023 Fall - Covenants Summary - AutoGen : 12 Objects
+
+'skinparam classBorderThickness 0
+
+hide circle
+hide empty methods
+hide empty fields
+
+
+entity CovenantRule as "<b>Covenant Rule</b> \nLLC_BI__Covenant_Rule__c"  {
+<u><b>LLC_BI__Covenant__c: Covenant Mgmt</b></u>
+}
+entity CovenantType as "<b>Covenant Type</b> \nLLC_BI__Covenant_Type__c"  {
+}
+entity CovenantProduct as "<b>Covenant Product</b> \nLLC_BI__Covenant_Product__c"  {
+<u><b>LLC_BI__Covenant2__c: Covenant Mgmt</b></u>
+}
+entity CovenantMgmt as "<b>Covenant Mgmt</b> \nLLC_BI__Covenant2__c"  {
+LLC_BI__Covenant_Type__c: Covenant Type
+LLC_BI__Related_Covenant__c: Covenant Mgmt
+LLC_BI__Account__c: Relationship
+}
+entity LoanCovenant as "<b>Loan Covenant</b> \nLLC_BI__Loan_Covenant__c"  {
+<u><b>LLC_BI__Covenant2__c: Covenant Mgmt</b></u>
+<u><b>LLC_BI__Loan__c: Loan</b></u>
+}
+entity Loan as "<b>Loan</b> \nLLC_BI__Loan__c"  {
+LLC_BI__Account__c: Relationship
+LLC_BI__Highest__c: Loan
+LLC_BI__ParentLoan__c: Loan
+LLC_BI__OriginalParentLoan__c: Loan
+Main_Contact__c: Contact
+Legal_Firm_Customer__c: Relationship
+}
+entity PolicyException as "<b>Policy Exception</b> \nLLC_BI__Policy_Exception__c"  {
+LLC_BI__Covenant_Mgmt__c: Covenant Mgmt
+LLC_BI__Loan__c: Loan
+LLC_BI__Relationship__c: Relationship
+}
+entity PricingCovenant as "<b>Pricing Covenant</b> \nLLC_BI__Pricing_Covenant__c"  {
+<u><b>LLC_BI__Covenant2__c: Covenant Mgmt</b></u>
+}
+entity Relationship as "<b>Relationship</b> \nAccount" #lightblue {
+MasterRecordId: Relationship
+}
+entity CovenantCompliance as "<b>Covenant Compliance</b> \nLLC_BI__Covenant_Compliance2__c"  {
+<u><b>LLC_BI__Covenant__c: Covenant Mgmt</b></u>
+}
+entity AccountCovenant as "<b>Account Covenant</b> \nLLC_BI__Account_Covenant__c"  {
+<u><b>LLC_BI__Covenant2__c: Covenant Mgmt</b></u>
+<u><b>LLC_BI__Account__c: Relationship</b></u>
+LLC_BI__Contact__c: Contact
+}
+entity Contact as "<b>Contact</b> \nContact" #lightblue {
+MasterRecordId: Contact
+AccountId: Relationship
+ReportsToId: Contact
+}
+
+CovenantRule }o--|| CovenantMgmt
+Relationship }o--o| Relationship
+PricingCovenant }o--|| CovenantMgmt
+CovenantMgmt }o--o| CovenantType
+CovenantMgmt }o--o| CovenantMgmt
+CovenantMgmt }o--o| Relationship
+CovenantProduct }o--|| CovenantMgmt
+PolicyException }o--o| CovenantMgmt
+PolicyException }o--o| Loan
+PolicyException }o--o| Relationship
+Loan }o--o| Relationship
+Loan }o--o| Loan
+Loan }o--o| Loan
+Loan }o--o| Loan
+Loan }o--o| Contact
+Loan }o--o| Relationship
+LoanCovenant }o--|| CovenantMgmt
+LoanCovenant }o--|| Loan
+CovenantCompliance }o--|| CovenantMgmt
+AccountCovenant }o--|| CovenantMgmt
+AccountCovenant }o--|| Relationship
+AccountCovenant }o--o| Contact
+Contact }o--o| Contact
+Contact }o--o| Relationship
+Contact }o--o| Contact
+
+@enduml

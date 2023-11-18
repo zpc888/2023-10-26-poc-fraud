@@ -25,24 +25,16 @@ entity Rate as "<b>Rate</b> \nLLC_BI__Rate__c"  {
 entity Index as "<b>Index</b> \nLLC_BI__Index__mdt"  {
 }
 entity PricingRateComponent as "<b>Pricing Rate Component</b> \nLLC_BI__Pricing_Rate_Component__c"  {
-<u><b>LLC_BI__Pricing_Stream__c: Pricing Stream</b></u>
 }
 entity PricingCovenant as "<b>Pricing Covenant</b> \nLLC_BI__Pricing_Covenant__c"  {
-<u><b>LLC_BI__Pricing_Rate_Component__c: Pricing Rate Component</b></u>
 }
 entity Period as "<b>Period</b> \nLLC_BI__Period__mdt"  {
 }
 entity Loan as "<b>Loan</b> \nLLC_BI__Loan__c"  {
-LLC_BI__Highest__c: Loan
-LLC_BI__ParentLoan__c: Loan
-LLC_BI__OriginalParentLoan__c: Loan
 }
 entity PricingStream as "<b>Pricing Stream</b> \nLLC_BI__Pricing_Stream__c"  {
-LLC_BI__Loan__c: Loan
 }
 entity PricingPaymentComponent as "<b>Pricing Payment Component</b> \nLLC_BI__Pricing_Payment_Component__c"  {
-<u><b>LLC_BI__Pricing_Stream__c: Pricing Stream</b></u>
-LLC_BI__Rate_Stream__c: Pricing Stream
 }
 
 PricingStream }o--o| Loan

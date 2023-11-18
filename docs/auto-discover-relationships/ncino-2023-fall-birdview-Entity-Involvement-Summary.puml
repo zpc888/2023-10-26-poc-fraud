@@ -21,42 +21,20 @@ hide empty fields
 
 
 entity ConnectionRole as "<b>Connection Role</b> \nLLC_BI__Connection_Role__c"  {
-LLC_BI__Reciprocal_Role__c: Connection Role
 }
 entity Connection as "<b>Connection</b> \nLLC_BI__Connection__c"  {
-<u><b>LLC_BI__Connected_From__c: Relationship</b></u>
-<b>LLC_BI__Connected_To__c: Relationship</b>
-LLC_BI__Connection_Role__c: Connection Role
 }
 entity Relationship as "<b>Relationship</b> \nAccount" #lightblue {
-MasterRecordId: Relationship
 }
 entity Contact as "<b>Contact</b> \nContact" #lightblue {
-AccountId: Relationship
-MasterRecordId: Contact
-ReportsToId: Contact
 }
 entity Address as "<b>Address</b> \nLLC_BI__Address__c"  {
-LLC_BI__Contact__c: Contact
-LLC_BI__Account__c: Relationship
 }
 entity AuthorizedAccount as "<b>Authorized Account</b> \nLLC_BI__Authorized_Account__c"  {
-<u><b>LLC_BI__Account__c: Relationship</b></u>
-LLC_BI__Authorized_Account__c: Authorized Account
-<u><b>LLC_BI__Entity__c: Entity Involvement</b></u>
 }
 entity EntityInvolvement as "<b>Entity Involvement</b> \nLLC_BI__Legal_Entities__c"  {
-LLC_BI__Loan__c: Loan
-<u><b>LLC_BI__Account__c: Relationship</b></u>
-LLC_BI__Doing_Business_As__c: Relationship
 }
 entity Loan as "<b>Loan</b> \nLLC_BI__Loan__c"  {
-LLC_BI__Account__c: Relationship
-LLC_BI__OriginalParentLoan__c: Loan
-Main_Contact__c: Contact
-Legal_Firm_Customer__c: Relationship
-LLC_BI__Highest__c: Loan
-LLC_BI__ParentLoan__c: Loan
 }
 
 Connection }o--|| Relationship: M

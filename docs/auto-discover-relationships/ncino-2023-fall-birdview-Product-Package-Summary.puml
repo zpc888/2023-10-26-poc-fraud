@@ -21,128 +21,48 @@ hide empty fields
 
 
 entity ConnectionRole as "<b>Connection Role</b> \nLLC_BI__Connection_Role__c"  {
-LLC_BI__Reciprocal_Role__c: Connection Role
 }
 entity Connection as "<b>Connection</b> \nLLC_BI__Connection__c"  {
-<u><b>LLC_BI__Connected_From__c: Relationship</b></u>
-<b>LLC_BI__Connected_To__c: Relationship</b>
-LLC_BI__Connection_Role__c: Connection Role
 }
 entity Opportunity as "<b>Opportunity</b> \nOpportunity" #lightblue {
-AccountId: Relationship
-ContactId: Contact
-LastAmountChangedHistoryId: Opportunity History
-LastCloseDateChangedHistoryId: Opportunity History
-LLC_BI__Branch__c: Branch
-LLC_BI__Converted_Deposit__c: Deposit
-LLC_BI__Loan__c: Loan
-LLC_BI__Product_Package__c: Product Package
-Parent_Opportunity__c: Opportunity
 }
 entity ProductPackageTeamMember as "<b>Product Package Team Member</b> \nLLC_BI__Product_Package_Team__c"  {
-<u><b>LLC_BI__Product_Package__c: Product Package</b></u>
 }
 entity AuthorizedSigner as "<b>Authorized Signer</b> \nLLC_BI__Contingent_Liabilty__c"  {
-<u><b>LLC_BI__Contact__c: Contact</b></u>
-<u><b>LLC_BI__Entity__c: Entity Involvement</b></u>
-LLC_BI__Authorized_Signer__c: Authorized Signer
 }
 entity Contact as "<b>Contact</b> \nContact" #lightblue {
-MasterRecordId: Contact
-AccountId: Relationship
-ReportsToId: Contact
 }
 entity Lead as "<b>Lead</b> \nLead" #lightblue {
-MasterRecordId: Lead
-ConvertedAccountId: Relationship
-ConvertedContactId: Contact
-ConvertedOpportunityId: Opportunity
-LLC_BI__Account__c: Relationship
-LLC_BI__Branch__c: Branch
-LLC_BI__Loan__c: Loan
-LLC_BI__Product_Package__c: Product Package
 }
 entity Relationship as "<b>Relationship</b> \nAccount" #lightblue {
-MasterRecordId: Relationship
-LLC_BI__Branch__c: Branch
 }
 entity ProductPackage as "<b>Product Package</b> \nLLC_BI__Product_Package__c"  {
-LLC_BI__Account__c: Relationship
-LLC_BI__Credit_Memo__c: Credit Memo
-LLC_BI__Primary_Entity__c: Relationship
 }
 entity Deposit as "<b>Deposit</b> \nLLC_BI__Deposit__c"  {
-LLC_BI__Account__c: Relationship
-LLC_BI__Application__c: Application
-LLC_BI__Contact__c: Contact
-LLC_BI__Originating_Branch__c: Branch
-LLC_BI__Product_Package__c: Product Package
-LLC_BI__Related_Deposit__c: Deposit
-LLC_BI__Account_To_Receive_Accrued_Interest__c: Deposit
-LLC_BI__Relationship_Under_Maintenance__c: Relationship
 }
 entity Branch as "<b>Branch</b> \nLLC_BI__Branch__c"  {
 }
 entity ReviewAccount as "<b>Review Account</b> \nLLC_BI__Review_Account__c"  {
-<u><b>LLC_BI__Review__c: Review</b></u>
-LLC_BI__Account__c: Relationship
 }
 entity ProductPackageLoanHistory as "<b>Product Package Loan History</b> \nLLC_BI__Product_Package_Parent_Loan_History__c"  {
-LLC_BI__Child_Highest__c: Loan
-LLC_BI__Child_Loan__c: Loan
-LLC_BI__Parent_Loan__c: Loan
-LLC_BI__Product_Package__c: Product Package
 }
 entity Loan as "<b>Loan</b> \nLLC_BI__Loan__c"  {
-LLC_BI__Account__c: Relationship
-LLC_BI__Application__c: Application
-LLC_BI__Branch__c: Branch
-LLC_BI__Credit_Memo__c: Credit Memo
-LLC_BI__Highest__c: Loan
-LLC_BI__ParentLoan__c: Loan
-LLC_BI__Product_Package__c: Product Package
-LLC_BI__OriginalParentLoan__c: Loan
-Main_Contact__c: Contact
-Legal_Firm_Customer__c: Relationship
 }
 entity Review as "<b>Review</b> \nLLC_BI__Review__c"  {
-LLC_BI__Account__c: Relationship
-LLC_BI__Credit_Memo__c: Credit Memo
-LLC_BI__Product_Package__c: Product Package
 }
 entity EntityInvolvement as "<b>Entity Involvement</b> \nLLC_BI__Legal_Entities__c"  {
-<u><b>LLC_BI__Account__c: Relationship</b></u>
-LLC_BI__Deposit__c: Deposit
-LLC_BI__Loan__c: Loan
-LLC_BI__Product_Package__c: Product Package
-LLC_BI__Treasury_Service__c: Treasury Service
-LLC_BI__Doing_Business_As__c: Relationship
 }
 entity ReviewLoan as "<b>Review Loan</b> \nLLC_BI__Review_Loan__c"  {
-<u><b>LLC_BI__Review__c: Review</b></u>
-LLC_BI__Loan__c: Loan
 }
 entity Application as "<b>Application</b> \nLLC_BI__Application__c"  {
-nPortal__Account__c: Relationship
-nPortal__Product_Package__c: Product Package
 }
 entity TreasuryService as "<b>Treasury Service</b> \nLLC_BI__Treasury_Service__c"  {
-LLC_BI__Branch__c: Branch
-LLC_BI__Credit_Memo__c: Credit Memo
-LLC_BI__Product_Package__c: Product Package
-LLC_BI__Relationship__c: Relationship
-LLC_BI__Application__c: Application
 }
 entity LoanTeamMember as "<b>Loan Team Member</b> \nLLC_BI__LoanTeam__c"  {
-<u><b>LLC_BI__Loan__c: Loan</b></u>
 }
 entity CreditMemo as "<b>Credit Memo</b> \nLLC_BI__Credit_Memo__c"  {
 }
 entity OpportunityHistory as "<b>Opportunity History</b> \nLLC_BI__Opportunity_History__c"  {
-LLC_BI__Deposit__c: Deposit
-LLC_BI__Loan__c: Loan
-LLC_BI__Product_Package__c: Product Package
-LLC_BI__Treasury_Service__c: Treasury Service
 }
 
 ProductPackageTeamMember }o--|| ProductPackage: M

@@ -21,39 +21,24 @@ hide empty fields
 
 
 entity AdverseAction as "<b>Adverse Action</b> \nLLC_BI__Adverse_Action__c"  {
-<u><b>LLC_BI__Loan__c: Loan</b></u>
 }
 entity ThirdPartyReport as "<b>Third Party Report</b> \nLLC_BI__third_party_report__c"  {
-<u><b>LLC_BI__Loan__c: Loan</b></u>
 }
 entity EntityInvolvement as "<b>Entity Involvement</b> \nLLC_BI__Legal_Entities__c"  {
-LLC_BI__Loan__c: Loan
 }
 entity Loan as "<b>Loan</b> \nLLC_BI__Loan__c"  {
-LLC_BI__Highest__c: Loan
-LLC_BI__OriginalParentLoan__c: Loan
-LLC_BI__ParentLoan__c: Loan
 }
 entity LoanModification as "<b>Loan Modification</b> \nLLC_BI__Loan_Modification__c"  {
-<u><b>LLC_BI__Loan__c: Loan</b></u>
 }
 entity Participation as "<b>Participation</b> \nLLC_BI__Participation__c"  {
-<u><b>LLC_BI__Loan__c: Loan</b></u>
 }
 entity Statistic as "<b>Statistic</b> \nLLC_BI__Statistic__c"  {
-LLC_BI__Loan__c: Loan
 }
 entity LoanRenewal as "<b>LoanRenewal</b> \nLLC_BI__LoanRenewal__c"  {
-<u><b>LLC_BI__ParentLoanId__c: Loan</b></u>
-LLC_BI__RenewalLoanId__c: Loan
-LLC_BI__Original_Parent__c: Loan
 }
 entity Memo as "<b>Memo</b> \nLLC_BI__Credit_Memo_Modifcation__c"  {
-LLC_BI__Loan_Renewal__c: LoanRenewal
-<u><b>LLC_BI__Loan__c: Loan</b></u>
 }
 entity Memo_Data as "<b>Memo_Data</b> \nLLC_BI__Memo_Data__c"  {
-<u><b>LLC_BI__Memo__c: Memo</b></u>
 }
 
 Statistic }o--o| Loan

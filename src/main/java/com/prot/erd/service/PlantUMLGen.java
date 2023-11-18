@@ -25,6 +25,12 @@ public class PlantUMLGen {
     private String niceTitlePrefix;
     private String niceTitleSuffix;
 
+    private boolean birdview;
+
+    public void setBirdview(boolean birdview) {
+        this.birdview = birdview;
+    }
+
     public void setOutputFileFormatter(String prefix, String suffix) {
         this.outFilePrefix = prefix;
         this.outFileSuffix = suffix;
@@ -71,8 +77,9 @@ public class PlantUMLGen {
             Map<String, List<SObjectField>> verifiedMap = new SOQLResultParserHtmlImpl()
                     .parse(aspect, objectApis, is);
             String title = addPrefixAndSuffix(niceTitlePrefix, aspect, niceTitleSuffix);
-            new SOQLResultToERDGen().gen(pw, title + " : " + objectApis.size() + " Objects",
-                    objectApis, verifiedMap);
+            SOQLResultToERDGen erdGen = new SOQLResultToERDGen();
+            erdGen.setBirdview(birdview);
+            erdGen.gen(pw, title, objectApis, verifiedMap);
         }
     }
 

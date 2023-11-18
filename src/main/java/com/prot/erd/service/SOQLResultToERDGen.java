@@ -5,10 +5,7 @@ import com.prot.erd.model.SObjectField;
 import com.prot.poc.common.AppException;
 
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -16,6 +13,13 @@ import java.util.stream.Collectors;
  * @Created: 2023-11-17T09:52 Friday
  */
 public class SOQLResultToERDGen {
+    private boolean birdview;
+    private String nRelationshipLineRenderApproach = "Collapsed";
+
+    public void setBirdview(boolean birdview) {
+        this.birdview = birdview;
+    }
+
     public void gen(PrintWriter pw, String title, List<String> objectApis,
                     Map<String, List<SObjectField>> fieldsByObjMap) {
         if (objectApis == null || objectApis.isEmpty()) {
@@ -24,16 +28,27 @@ public class SOQLResultToERDGen {
         pw.println("@startuml");
         pw.println("'https://plantuml.com/class-diagram");
         pw.println();
+//        pw.println("caption " + objectApis.size() + " objects");
+        pw.println("left header " + objectApis.size() + " objects");
         pw.println("title " + title);
         pw.println();
         pw.println("""
-                    'skinparam classBorderThickness 0
+                'skinparam classBorderThickness 0
 
-                    hide circle
-                    hide empty methods
-                    hide empty fields
-
-                    """);
+                hide circle
+                hide empty methods
+                hide empty fields
+                                
+                'legend right
+                '  Relationship
+                '    M = MasterDetail
+                '    xn = n-times
+                '  Field
+                '    bold = required
+                '    underline = MasterDetail
+                'endlegend
+                
+                """);
         Map<String, List<SObjectField>> onlyRelaFields = filterOnlyRelatedFields(objectApis, fieldsByObjMap);
         objectApis.forEach(e -> printEntity(e, fieldsByObjMap.get(e).get(0), onlyRelaFields.get(e), pw));
         pw.println();
@@ -48,16 +63,51 @@ public class SOQLResultToERDGen {
     }
 
     private void printRelationships(PrintWriter pw, Map<String, SObjectField> objLabelToFirstFields, Map<String, List<SObjectField>> onlyRelaFields) {
+        List<String> relaList = new ArrayList<>(128);
         onlyRelaFields.values().stream().flatMap(List::stream).forEach(f -> {
             String fromEntity = f.getObjectCode();
             String toEntity = objLabelToFirstFields.get(f.getRelatedObjectLabel()).getObjectCode();
             Relationship.Cardinality fromCardinality = Relationship.Cardinality.ZERO_OR_MANY;
             Relationship.Cardinality toCardinality = f.isNillable() ? Relationship.Cardinality.ZERO_OR_ONE
                     : Relationship.Cardinality.EXACTLY_ONE;
-            pw.printf("%s %s--%s %s%n",
+            String r = String.format("%s %s--%s %s",
                     fromEntity, fromCardinality.plantumlAtFromSide(),
                     toCardinality.plantumlAtToSide(), toEntity);
+            if (f.isMasterDetail()) {
+                r = r + ": M";
+            }
+            relaList.add(r);
         });
+//        renderDirectly(pw, relaList);
+        renderCollapsed(pw, relaList);
+    }
+
+    private void renderCollapsed(PrintWriter pw, List<String> relaList) {
+        Map<String, Integer> uniqCount = new HashMap<>(32);
+        for (String r: relaList) {
+            Integer cnt = uniqCount.get(r);
+            if (cnt == null) {
+                cnt = 1;
+            } else {
+                cnt = cnt.intValue() + 1;
+            }
+            uniqCount.put(r, cnt);
+        }
+        for (String r: uniqCount.keySet()) {
+            int cnt = uniqCount.get(r);
+            if (cnt > 1) {
+                if (r.endsWith(": M")) {
+                    r = r + " x" + cnt;
+                } else {
+                    r = r + ": x" + cnt;
+                }
+            }
+            pw.println(r);
+        }
+    }
+
+    private void renderDirectly(PrintWriter pw, List<String> relaList) {
+        relaList.forEach(System.out::println);
     }
 
 
@@ -66,18 +116,20 @@ public class SOQLResultToERDGen {
         String backgroundColor = first.getObjectApiName().indexOf("__") > 0 ? "" : "#lightblue";
         pw.printf("entity %s as \"<b>%s</b> \\n%s\" %s {%n",
                 first.getObjectCode(), first.getObjectLabel(), objApi, backgroundColor);
-        relatedFields.forEach(f -> {
-            String out = String.format("%s: %s", f.getFieldApiName(), f.getRelatedObjectLabel());
-            if (!f.isNillable()) {
-                out = "<b>" + out + "</b>";  // bold
-            }
-            if (f.isMasterDetail()) {
+        if (!birdview) {
+            relatedFields.forEach(f -> {
+                String out = String.format("%s: %s", f.getFieldApiName(), f.getRelatedObjectLabel());
+                if (!f.isNillable()) {
+                    out = "<b>" + out + "</b>";  // bold
+                }
+                if (f.isMasterDetail()) {
 //                out = "<font color=\"blue\">" + out + "</font>";
 //                out = "<u:green>" + out + "</u>";
-                out = "<u>" + out + "</u>";
-            }
-            pw.println(out);
-        });
+                    out = "<u>" + out + "</u>";
+                }
+                pw.println(out);
+            });
+        }
         pw.println("}");
 
     }

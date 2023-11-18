@@ -21,58 +21,30 @@ hide empty fields
 
 
 entity CollateralValuation as "<b>Collateral Valuation</b> \nLLC_BI__Collateral_Valuation__c"  {
-<u><b>LLC_BI__Collateral__c: Collateral Mgmt</b></u>
 }
 entity ProductCollateralType as "<b>Product Collateral Type</b> \nLLC_BI__Product_Collateral_Type__c"  {
-<b>LLC_BI__Collateral_Type__c: Collateral Type</b>
 }
 entity CollateralType as "<b>Collateral Type</b> \nLLC_BI__Collateral_Type__c"  {
-LLC_BI__Highest_Type__c: Collateral Type
-LLC_BI__Parent_Type__c: Collateral Type
 }
 entity CollateralMgmt as "<b>Collateral Mgmt</b> \nLLC_BI__Collateral__c"  {
-<b>LLC_BI__Collateral_Type__c: Collateral Type</b>
-LLC_BI__Legacy_Collateral__c: Collateral
-LLC_BI__Highest__c: Collateral Mgmt
-LLC_BI__Parent_Collateral__c: Collateral Mgmt
 }
 entity CollateralGroup as "<b>Collateral Group</b> \nLLC_BI__Collateral_Group__c"  {
-<b>LLC_BI__Associated_Collateral__c: Collateral Mgmt</b>
-<b>LLC_BI__Collateral_Group__c: Collateral Mgmt</b>
 }
 entity Lien as "<b>Lien</b> \nLLC_BI__Lien__c"  {
-<u><b>LLC_BI__Collateral__c: Collateral Mgmt</b></u>
-LLC_BI__Loan__c: Loan
 }
 entity Collateral as "<b>Collateral</b> \nLLC_BI__Loan_Collateral__c"  {
-<u><b>LLC_BI__Loan__c: Loan</b></u>
 }
 entity CollateralOwnership as "<b>Collateral Ownership</b> \nLLC_BI__Account_Collateral__c"  {
-<u><b>LLC_BI__Account__c: Relationship</b></u>
-<u><b>LLC_BI__Collateral__c: Collateral Mgmt</b></u>
 }
 entity Relationship as "<b>Relationship</b> \nAccount" #lightblue {
-MasterRecordId: Relationship
 }
 entity PolicyException as "<b>Policy Exception</b> \nLLC_BI__Policy_Exception__c"  {
-LLC_BI__Collateral_Mgmt__c: Collateral Mgmt
-LLC_BI__Loan__c: Loan
-LLC_BI__Relationship__c: Relationship
 }
 entity Loan as "<b>Loan</b> \nLLC_BI__Loan__c"  {
-LLC_BI__Account__c: Relationship
-LLC_BI__Highest__c: Loan
-LLC_BI__Loan_Collateral_Aggregate__c: Loan Collateral Aggregate
-LLC_BI__ParentLoan__c: Loan
-LLC_BI__OriginalParentLoan__c: Loan
-Legal_Firm_Customer__c: Relationship
 }
 entity LoanCollateralAggregate as "<b>Loan Collateral Aggregate</b> \nLLC_BI__Loan_Collateral_Aggregate__c"  {
 }
 entity CollateralPledged as "<b>Collateral Pledged</b> \nLLC_BI__Loan_Collateral2__c"  {
-<u><b>LLC_BI__Collateral__c: Collateral Mgmt</b></u>
-<u><b>LLC_BI__Loan_Collateral_Aggregate__c: Loan Collateral Aggregate</b></u>
-<b>LLC_BI__Loan__c: Loan</b>
 }
 
 Lien }o--|| CollateralMgmt: M

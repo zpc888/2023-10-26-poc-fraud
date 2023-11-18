@@ -14,11 +14,22 @@ import java.util.List;
 public class NCino2023FallSOQLGen {
     public static void main(String[] args) {
         genSOQL();
+        genERDsInBirdview();
         genERDs();
+    }
+
+    private static void genERDsInBirdview() {
+        PlantUMLGen plantUMLGen = new PlantUMLGen();
+        plantUMLGen.setBirdview(true);
+        plantUMLGen.setOutputFileFormatter("ncino-2023-fall-birdview-", null);
+        plantUMLGen.setNiceTitleFormatter("nCino 2023 Fall - ", " - AutoGen");
+        plantUMLGen.genAspectERDAutomatically("src/test/resources/erd/ncino-erds-2023-fall/auto-discover-relationships",
+                "docs/auto-discover-relationships");
     }
 
     private static void genERDs() {
         PlantUMLGen plantUMLGen = new PlantUMLGen();
+        plantUMLGen.setBirdview(false);
         plantUMLGen.setOutputFileFormatter("ncino-2023-fall-", "-auto-gen");
         plantUMLGen.setNiceTitleFormatter("nCino 2023 Fall - ", " - AutoGen");
         plantUMLGen.genAspectERDAutomatically("src/test/resources/erd/ncino-erds-2023-fall/auto-discover-relationships",

@@ -8,12 +8,12 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.mapping;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 /**
  * @Author: <a href="mailto: pengcheng.zhou@gmail.com">PengCheng Zhou</a>
@@ -46,19 +46,37 @@ public class PlantUMLGen {
         List<Pair<String, String>> pairs = loader.loadAspectObjects(inRootDir, "aspect-objects.txt");
         Map<String, List<String>> aspectObjects = pairs.stream().collect(Collectors.groupingBy(Pair::getKey,
                 mapping(Pair::getValue, toList())));
+        Map<String, Map<String, String>> objApiToLabelPerAspect = new HashMap<>(24);
         for (String aspect: aspectObjects.keySet()) {
             List<String> objectApis = aspectObjects.get(aspect);
             try {
-                genOneApsectERD(aspect, objectApis, inRootDir, outRootDir);
+                Map<String, String> objApiToLabels = genOneApsectERD(aspect, objectApis, inRootDir, outRootDir);
+                objApiToLabelPerAspect.put(aspect, objApiToLabels);
             } catch (AppException ae) {
                 throw ae;
             } catch (Exception ex) {
                 throw new AppException("Fail to generate aspect: " + aspect + " ERDs", ex);
             }
         }
+        generatePackageDiagram(outRootDir, objApiToLabelPerAspect);
     }
 
-    private void genOneApsectERD(String aspect, List<String> objectApis, String inRoot, String outRoot) throws Exception {
+    private void generatePackageDiagram(String outRootDir, Map<String, Map<String, String>> objApiToLabelPerAspect) {
+        // generate a package diagram including all objects
+        String outPkg = addPrefixAndSuffix(outFilePrefix, "package", "-diagram.puml");
+        File out = new File(outRootDir, outPkg);
+        try (OutputStream os = new FileOutputStream(out);
+             OutputStreamWriter osw = new OutputStreamWriter(os, StandardCharsets.UTF_8);
+             PrintWriter pw = new PrintWriter(osw)) {
+            getSoqlResultToERDGen().genPackageDiagram(pw,
+                    outFilePrefix == null ? "" : outFilePrefix.replaceAll("-", " ").trim(),
+                    objApiToLabelPerAspect);
+        } catch (Exception ex) {
+            throw new AppException("Fail to write package diagram: " + out.getAbsolutePath(), ex);
+        }
+    }
+
+    private Map<String, String> genOneApsectERD(String aspect, List<String> objectApis, String inRoot, String outRoot) throws Exception {
         String noSpace = aspect.replaceAll(" ", "-");
         String fieldFilename = noSpace + ".html";
         File f = new File(inRoot, fieldFilename);
@@ -77,10 +95,16 @@ public class PlantUMLGen {
             Map<String, List<SObjectField>> verifiedMap = new SOQLResultParserHtmlImpl()
                     .parse(aspect, objectApis, is);
             String title = addPrefixAndSuffix(niceTitlePrefix, aspect, niceTitleSuffix);
-            SOQLResultToERDGen erdGen = new SOQLResultToERDGen();
-            erdGen.setBirdview(birdview);
-            erdGen.gen(pw, title, objectApis, verifiedMap);
+            getSoqlResultToERDGen().gen(pw, title, objectApis, verifiedMap);
+            return verifiedMap.entrySet().stream().collect(
+                    Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get(0).getObjectLabel()));
         }
+    }
+
+    private SOQLResultToERDGen getSoqlResultToERDGen() {
+        SOQLResultToERDGen erdGen = new SOQLResultToERDGen();
+        erdGen.setBirdview(birdview);
+        return erdGen;
     }
 
     public void genUML(String erdDefRootDir, String outRootDir) {

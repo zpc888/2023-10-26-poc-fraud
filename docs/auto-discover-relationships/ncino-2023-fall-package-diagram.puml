@@ -1,0 +1,242 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+left header 14 aspects
+title ncino 2023 fall
+
+'skinparam classBorderThickness 0
+
+hide circle
+hide empty methods
+hide empty fields
+
+
+class "Document Manager Summary" {
+Relationship: Account
+User: User
+DocClass: LLC_BI__DocClass__c
+AccountDocument: LLC_BI__AccountDocument__c
+Attachment: Attachment
+Content Document Link: ContentDocumentLink
+Product: LLC_BI__Product__c
+Collateral Type: LLC_BI__Collateral_Type__c
+ProductDocTab: LLC_BI__ProductDocTab__c
+Document Store: LLC_BI__Document_Store__c
+Content Version: ContentVersion
+Document Version: LLC_BI__Document_Version__c
+LLC_LoanDocComment: LLC_BI__LLC_LoanDocComment__c
+Closing Checklist: LLC_BI__ClosingChecklist__c
+Deposit: LLC_BI__Deposit__c
+ProductCCL: LLC_BI__ProductCCL__c
+Loan: LLC_BI__Loan__c
+Collateral Type CCL: LLC_BI__Collateral_Type_CCL__c
+Content Document: ContentDocument
+Loan Document Name: LLC_BI__LLC_LoanDocument__c
+Document Placeholder: LLC_BI__Document_Placeholder__c
+Note: Note
+DocManager: LLC_BI__DocManager__c
+DocTab: LLC_BI__DocTab__c
+Document Collection Index: LLC_BI__Document_Collection_Index__c
+DocType: LLC_BI__DocType__c
+AccountDocComment: LLC_BI__AccountDocComment__c
+Document Store Index: LLC_BI__Document_Store_Index__c
+}
+class "Spreads Summary" {
+Relationship: Account
+User: User
+Period Consolidation: LLC_BI__Period_Consolidation__c
+Spread Statement Template: LLC_BI__Spread_Statement_Type__c
+Spread Statement View: LLC_BI__Spread_Statement_View__c
+_D Spread Statement Group Total: LLC_BI__Spread_Statement_Group_Total__c
+Underwriting Summary: LLC_BI__Underwriting_Summary__c
+Tenant Information: LLC_BI__Tenant_Information__c
+Spread Statement Period Total: LLC_BI__Spread_Statement_Period_Total__c
+Covenant Mgmt: LLC_BI__Covenant2__c
+Financial Consolidation: LLC_BI__Financial_Consolidation__c
+Loan: LLC_BI__Loan__c
+Spread Statement Record Value: LLC_BI__Spread_Statement_Record_Value__c
+Covenant Compliance: LLC_BI__Covenant_Compliance2__c
+Spread: LLC_BI__Spread__c
+Spread Record Total Classification: LLC_BI__Spread_Record_Total_Classification__c
+Entity Involvement: LLC_BI__Legal_Entities__c
+Spread Record Classification: LLC_BI__Spread_Record_Classification__c
+Spread Statement Period: LLC_BI__Spread_Statement_Period__c
+Spread Statement Total Group: LLC_BI__Spread_Statement_Record_Total__c
+_D Spread Statement Record Group: LLC_BI__Spread_Statement_Record_Group__c
+Spread Statement Record: LLC_BI__Spread_Statement_Record__c
+Underwriting Bundle: LLC_BI__Underwriting_Bundle__c
+}
+class "Deposit Summary" {
+Relationship: Account
+Funding Method: LLC_BI__Funding_Method__c
+Product Package: LLC_BI__Product_Package__c
+Deposit: LLC_BI__Deposit__c
+Product Type: LLC_BI__Product_Type__c
+Product: LLC_BI__Product__c
+Contact: Contact
+Authorized Account: LLC_BI__Authorized_Account__c
+Funding Method Type: LLC_BI__Funding_Method_Type__c
+Ownership Structure Role: LLC_BI__Ownership_Structure_Role__c
+Treasury Service: LLC_BI__Treasury_Service__c
+Analyzed Account: LLC_BI__Analyzed_Account__c
+Tier: LLC_BI__Tier__c
+Beneficiary: LLC_BI__Beneficiary__c
+Entity Involvement: LLC_BI__Legal_Entities__c
+Ownership Structure Type: LLC_BI__Ownership_Structure_Type__c
+Authorized Signer: LLC_BI__Contingent_Liabilty__c
+Product Feature: LLC_BI__Product_Feature__c
+Branch: LLC_BI__Branch__c
+Deposit Rate Structure: LLC_BI__Deposit_Rate_Structure__c
+Product Line: LLC_BI__Product_Line__c
+Authorized User: LLC_BI__Authorized_User__c
+}
+class "Product Package Summary" {
+Relationship: Account
+Loan Team Member: LLC_BI__LoanTeam__c
+Product Package: LLC_BI__Product_Package__c
+Review Account: LLC_BI__Review_Account__c
+Connection Role: LLC_BI__Connection_Role__c
+Opportunity History: LLC_BI__Opportunity_History__c
+Deposit: LLC_BI__Deposit__c
+Application: LLC_BI__Application__c
+Loan: LLC_BI__Loan__c
+Contact: Contact
+Review Loan: LLC_BI__Review_Loan__c
+Product Package Team Member: LLC_BI__Product_Package_Team__c
+Review: LLC_BI__Review__c
+Treasury Service: LLC_BI__Treasury_Service__c
+Product Package Loan History: LLC_BI__Product_Package_Parent_Loan_History__c
+Entity Involvement: LLC_BI__Legal_Entities__c
+Opportunity: Opportunity
+Connection: LLC_BI__Connection__c
+Lead: Lead
+Authorized Signer: LLC_BI__Contingent_Liabilty__c
+Branch: LLC_BI__Branch__c
+Credit Memo: LLC_BI__Credit_Memo__c
+}
+class "Consumer Loan Summary" {
+Relationship: Account
+Loan Compliance: LLC_BI__Loan_Compliance__c
+Pricing Option: LLC_BI__Pricing_Option__c
+Product Type: LLC_BI__Product_Type__c
+Loan: LLC_BI__Loan__c
+Product: LLC_BI__Product__c
+Contact: Contact
+Entity Involvement: LLC_BI__Legal_Entities__c
+Product Feature: LLC_BI__Product_Feature__c
+Branch: LLC_BI__Branch__c
+Fee Loan Aggregate: LLC_BI__Fee_Loan_Aggregate__c
+Product Line: LLC_BI__Product_Line__c
+Adverse Action: LLC_BI__Adverse_Action__c
+Fee: LLC_BI__Fee__c
+}
+class "Collateral Summary" {
+Relationship: Account
+Collateral: LLC_BI__Loan_Collateral__c
+Collateral Ownership: LLC_BI__Account_Collateral__c
+Collateral Valuation: LLC_BI__Collateral_Valuation__c
+Loan: LLC_BI__Loan__c
+Lien: LLC_BI__Lien__c
+Collateral Pledged: LLC_BI__Loan_Collateral2__c
+Collateral Type: LLC_BI__Collateral_Type__c
+Collateral Group: LLC_BI__Collateral_Group__c
+Product Collateral Type: LLC_BI__Product_Collateral_Type__c
+Policy Exception: LLC_BI__Policy_Exception__c
+Loan Collateral Aggregate: LLC_BI__Loan_Collateral_Aggregate__c
+Collateral Mgmt: LLC_BI__Collateral__c
+}
+class "Product Catalog Summary" {
+Reconciliation Service: LLC_BI__Reconciliation_Service__c
+Deposit: LLC_BI__Deposit__c
+Product Type: LLC_BI__Product_Type__c
+Product Connection: LLC_BI__Product_Connection__c
+Loan: LLC_BI__Loan__c
+Product: LLC_BI__Product__c
+Product State Config Pivot: LLC_BI__Product_State_Config_Pivot__c
+Treasury Service: LLC_BI__Treasury_Service__c
+Product State Config: LLC_BI__Product_State_Config__c
+Bill Point: LLC_BI__Bill_Point__c
+Product Funding Method Type: LLC_BI__Product_Funding_Method_Type__c
+Product Feature: LLC_BI__Product_Feature__c
+Product Line: LLC_BI__Product_Line__c
+}
+class "Risk Rating Summary" {
+Risk Grading Criteria: LLC_BI__Risk_Grade_Criteria__c
+Relationship: Account
+Risk Grade Factor Value: LLC_BI__Risk_Grade_Factor_Value__c
+Risk Rating Review: LLC_BI__Annual_Review__c
+Risk Grade Template: LLC_BI__Risk_Grade_Template__c
+Product Program: LLC_BI__Product_Program__c
+Product Program History Detail: LLC_BI__Product_Program_History_Detail__c
+Risk Grade Group: LLC_BI__Risk_Grade_Group__c
+Risk Grade Factor: LLC_BI__Risk_Grade_Factor__c
+Product Program History: LLC_BI__Product_Program_History__c
+Loan: LLC_BI__Loan__c
+Product: LLC_BI__Product__c
+}
+class "Covenants Summary" {
+Covenant Rule: LLC_BI__Covenant_Rule__c
+Relationship: Account
+Pricing Covenant: LLC_BI__Pricing_Covenant__c
+Covenant Type: LLC_BI__Covenant_Type__c
+Covenant Mgmt: LLC_BI__Covenant2__c
+Covenant Product: LLC_BI__Covenant_Product__c
+Policy Exception: LLC_BI__Policy_Exception__c
+Loan: LLC_BI__Loan__c
+Loan Covenant: LLC_BI__Loan_Covenant__c
+Covenant Compliance: LLC_BI__Covenant_Compliance2__c
+Account Covenant: LLC_BI__Account_Covenant__c
+Contact: Contact
+}
+class "Loan Summary" {
+LoanRenewal: LLC_BI__LoanRenewal__c
+Memo: LLC_BI__Credit_Memo_Modifcation__c
+Loan Modification: LLC_BI__Loan_Modification__c
+Third Party Report: LLC_BI__third_party_report__c
+Entity Involvement: LLC_BI__Legal_Entities__c
+Statistic: LLC_BI__Statistic__c
+Loan: LLC_BI__Loan__c
+Memo_Data: LLC_BI__Memo_Data__c
+Participation: LLC_BI__Participation__c
+Adverse Action: LLC_BI__Adverse_Action__c
+}
+class "Smart Checklist Summary" {
+Collateral Pledged: LLC_BI__Loan_Collateral2__c
+Relationship: Account
+Treasury Service: LLC_BI__Treasury_Service__c
+Product Package: LLC_BI__Product_Package__c
+Checklist Auto Generation: LLC_BI__Checklist_Auto_Gen__e
+Loan: LLC_BI__Loan__c
+Checklist: LLC_BI__Checklist__c
+Requirement: LLC_BI__Requirement__c
+}
+class "Entity Involvement Summary" {
+Authorized Account: LLC_BI__Authorized_Account__c
+Relationship: Account
+Entity Involvement: LLC_BI__Legal_Entities__c
+Connection Role: LLC_BI__Connection_Role__c
+Connection: LLC_BI__Connection__c
+Loan: LLC_BI__Loan__c
+Address: LLC_BI__Address__c
+Contact: Contact
+}
+class "Rate and Payment Summary" {
+Pricing Covenant: LLC_BI__Pricing_Covenant__c
+Index: LLC_BI__Index__mdt
+Period: LLC_BI__Period__mdt
+Pricing Stream: LLC_BI__Pricing_Stream__c
+Rate: LLC_BI__Rate__c
+Pricing Rate Component: LLC_BI__Pricing_Rate_Component__c
+Pricing Payment Component: LLC_BI__Pricing_Payment_Component__c
+Loan: LLC_BI__Loan__c
+}
+class "Fees Summary" {
+Relationship: Account
+Template Records: LLC_BI__Template_Records__c
+Service Mgmt: LLC_BI__Service_Mgmt__c
+Service Mgmt Detail: LLC_BI__Service_Mgmt_Detail__c
+Fee Loan Aggregate: LLC_BI__Fee_Loan_Aggregate__c
+Loan: LLC_BI__Loan__c
+Fee: LLC_BI__Fee__c
+}
+@enduml

@@ -20,6 +20,46 @@ public class SOQLResultToERDGen {
         this.birdview = birdview;
     }
 
+    public void genPackageDiagram(PrintWriter pw, String title, Map<String, Map<String, String>> objApiToLabelPerAspect) {
+        if (objApiToLabelPerAspect == null || objApiToLabelPerAspect.isEmpty()) {
+            throw new AppException("No objects for " + title);
+        }
+        pw.println("@startuml");
+        pw.println("'https://plantuml.com/class-diagram");
+        pw.println();
+        pw.println("left header " + objApiToLabelPerAspect.size() + " aspects");
+        pw.println("title " + title);
+        pw.println();
+        pw.println("""
+                'skinparam classBorderThickness 0
+
+                hide circle
+                hide empty methods
+                hide empty fields
+                                
+                """);
+        objApiToLabelPerAspect.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue((m1, m2) -> m2.size() - m1.size()))
+                .forEach(e -> {
+                   String aspect = e.getKey();
+                   Map<String, String> objApiToLabels = objApiToLabelPerAspect.get(aspect);
+                   pw.printf("class \"%s\" {%n", aspect);
+                   objApiToLabels.keySet().forEach(objApi -> {
+                       String label = objApiToLabels.get(objApi);
+                       if (birdview) {
+                           pw.println(objApi);
+                       } else {
+                           if (label.startsWith("-")) {
+                               label = "_" + label.substring(1);
+                           }
+                           pw.println(label + ": " + objApi);
+                       }
+                   });
+                   pw.println("}");
+                });
+        pw.println("@enduml");
+    }
+
     public void gen(PrintWriter pw, String title, List<String> objectApis,
                     Map<String, List<SObjectField>> fieldsByObjMap) {
         if (objectApis == null || objectApis.isEmpty()) {
